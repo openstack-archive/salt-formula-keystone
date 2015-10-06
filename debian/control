@@ -1,0 +1,15 @@
+Source: salt-formula-keystone
+Maintainer: Jakub Pavlik <jakub.pavlik@tcpcloud.eu>
+Section: admin
+Priority: optional
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.6
+Homepage: http://www.tcpcloud.eu
+Vcs-Browser: https://github.com/tcpcloud/salt-formula-keystone
+Vcs-Git: https://github.com/tcpcloud/salt-formula-keystone.git
+
+Package: salt-formula-keystone
+Architecture: all
+Depends: ${misc:Depends}, salt-master, reclass
+Description: Keystone Salt formula
+ Install and configure Keystone server and client.

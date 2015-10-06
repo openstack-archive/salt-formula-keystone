@@ -1,0 +1,14 @@
+{%- set cluster = pillar.keystone.cluster %}
+{%- set provider = salt['pillar.get']('keystone:control:provider:'+provider_name) %}
+{%- if provider.user is defined %}
+export OS_USERNAME={{ provider.user }}
+export OS_PASSWORD={{ provider.password }}
+export OS_TENANT_NAME={{ provider.tenant }}
+export OS_AUTH_URL=http://{{ provider.host }}:{{ provider.port }}/{{ provider.get('version', 'v2.0') }}
+{%- endif %}
+{%- if provider.token is defined %}
+export OS_SERVICE_TOKEN={{ provider.token }}
+export OS_SERVICE_ENDPOINT="http://{{ provider.host }}:{{ provider.port }}/{{ provider.get('version', 'v2.0') }}/"
+{%- endif %}
+export OS_AUTH_STRATEGY=keystone
+	

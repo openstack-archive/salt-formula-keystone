@@ -1,0 +1,48 @@
+
+{% set server = salt['grains.filter_by']({
+    'Debian': {
+        'pkgs': ['keystone', 'python-keystone', 'python-keystoneclient', 'python-psycopg2', 'python-mysqldb', 'mysql-client', 'python-six', 'python-memcache', 'python-openstackclient'],
+        'service_name': 'keystone',
+        'version': 'icehouse',
+        'api_version': '2',
+        'tokens': {
+          'engine': 'database',
+          'expiration': '86400'
+        },
+        'notification': False,
+        'roles': ['admin', 'Member']
+    },
+    'RedHat': {
+        'pkgs': ['openstack-keystone', 'openstack-utils', 'python-keystone', 'python-keystoneclient'],
+        'service_name': 'openstack-keystone',
+        'api_version': '2',
+        'version': 'icehouse',
+        'tokens': {
+          'engine': 'database',
+          'expiration': '86400'
+        },
+        'notification': False,
+        'roles': ['admin', 'Member']
+    },
+}, merge=salt['pillar.get']('keystone:server')) %}
+
+{% set client = salt['grains.filter_by']({
+    'Debian': {
+        'pkgs': ['python-keystoneclient', 'python-openstackclient'],
+        'service': 'keystone',
+        'roles': ['admin', 'Member'],
+    },
+    'RedHat': {
+        'pkgs': ['python-keystoneclient'],
+        'roles': ['admin', 'Member'],
+    },
+}, merge=salt['pillar.get']('keystone:client')) %}
+
+{% set control = salt['grains.filter_by']({
+    'Debian': {
+        'pkgs': [],
+    },
+    'RedHat': {
+        'pkgs': [],
+    },
+}, merge=salt['pillar.get']('keystone:control')) %}

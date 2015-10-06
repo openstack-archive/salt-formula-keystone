@@ -1,0 +1,2 @@
+keystone/*             /usr/share/salt-formulas/env/keystone/
+metadata/service/*      /usr/share/salt-formulas/reclass/service/keystone/

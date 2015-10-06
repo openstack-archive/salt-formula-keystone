@@ -1,0 +1,37 @@
+applications:
+- keystone
+parameters:
+  _param:
+    mysql_keystone_password: password
+  keystone:
+    server:
+      enabled: true
+      version: ${_param:keystone_version}
+      service_token: ${_param:keystone_service_token}
+      service_tenant: service
+      admin_tenant: admin
+      admin_name: admin
+      admin_password: ${_param:keystone_admin_password}
+      admin_email: root@localhost
+      bind:
+        address: 0.0.0.0
+        private_address: ${_param:keystone_service_host}
+        private_port: 35357
+        public_address: ${_param:keystone_service_host}
+        public_port: 5000
+      region: RegionOne
+      database:
+        engine: mysql
+        host: 'localhost'
+        name: 'keystone'
+        password: '${_param:mysql_keystone_password}'
+        user: 'keystone'
+      tokens:
+        engine: cache
+        expiration: 86400
+        location: /etc/keystone/fernet-keys/
+      cache:
+        engine: memcached
+        members: 
+        - host: localhost
+          port: 11211

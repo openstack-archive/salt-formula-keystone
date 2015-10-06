@@ -1,0 +1,9 @@
+{%- set server = pillar.keystone.server %}
+export OS_IDENTITY_API_VERSION=3
+export OS_AUTH_URL=http://{{ server.bind.private_address }}:{{ server.bind.private_port }}/v3
+export OS_PROJECT_DOMAIN_NAME=default
+export OS_USER_DOMAIN_NAME=default
+export OS_PROJECT_NAME={{ server.admin_tenant }}
+export OS_TENANT_NAME={{ server.admin_tenant }}
+export OS_USERNAME={{ server.admin_name }}
+export OS_PASSWORD={{ server.admin_password }}
