@@ -1,0 +1,19 @@
+doc:
+  name: Keystone
+  description: Keystone provides authentication, authorization and service discovery mechanisms via HTTP primarily for use by projects in the OpenStack family.
+  role:
+  {%- if pillar.keystone.client is defined %}
+    client:
+      name: client
+      param: {}
+  {%- endif %}
+  {%- if pillar.keystone.server is defined %}
+    server:
+      name: server
+      param: {}
+  {%- endif %}
+  {%- if pillar.keystone.control is defined %}
+    control:
+      name: control
+      param: {}
+  {%- endif %}
