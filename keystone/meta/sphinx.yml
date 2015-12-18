@@ -10,7 +10,9 @@ doc:
   {%- if pillar.keystone.server is defined %}
     server:
       name: server
-      param: {}
+      param:
+        token_engine:
+          value: {{ server.tokens.engine }}
   {%- endif %}
   {%- if pillar.keystone.control is defined %}
     control:

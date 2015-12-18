@@ -1,5 +1,7 @@
 applications:
 - keystone
+classes:
+- service.keystone.support
 parameters:
   _param:
     mysql_keystone_password: password
