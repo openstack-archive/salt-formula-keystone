@@ -1,0 +1,13 @@
+check:
+  local_keystone_server_proc:
+    command: "PATH=$PATH:/usr/lib64/nagios/plugins:/usr/lib/nagios/plugins check_procs -C keystone-all -u keystone -c 1:20"
+    interval: 60
+    occurrences: 1
+    subscribers:
+    - local-keystone-server
+  remote_keystone_server_api:
+    command: "PATH=$PATH:/usr/local/bin oschecks-check_keystone_api --os-auth-url='http://:::openstack.host:::::::openstack.port:::/v2.0' --os-username :::openstack.user::: --os-password :::openstack.password::: --tenant :::openstack.tenant:::"
+    interval: 300
+    occurrences: 1
+    subscribers:
+    - remote-network
