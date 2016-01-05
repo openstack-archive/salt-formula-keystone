@@ -78,7 +78,7 @@ admin_token={{ server.service_token }}
 # The HTTP header used to determine the scheme for the original request, even
 # if it was removed by an SSL terminating proxy. Typical value is
 # "HTTP_X_FORWARDED_PROTO". (string value)
-#secure_proxy_ssl_header = <None>
+secure_proxy_ssl_header = "HTTP_X_FORWARDED_PROTO"
 
 #
 # From keystone.notifications
