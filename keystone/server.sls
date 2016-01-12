@@ -70,6 +70,16 @@ keystone_group:
       - file: /etc/keystone/domains
     - watch_in:
       - service: keystone_service
+    - defaults:
+      - domain_name: {{ domain_name }}
+
+keystone_domain_{{ domain_name }}:
+  cmd.run:
+    - name: source /root/keystonercv3 && openstack domain create --description "{{ domain.description }}" {{ domain_name }}
+    - unless: source /root/keystonercv3 && openstack domain list | grep " {{ domain_name }}"
+    - require:
+      - file: /root/keystonercv3
+      - service: keystone_service
 {%- endfor %}
 
 {%- endif %}
