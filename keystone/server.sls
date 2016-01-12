@@ -74,6 +74,17 @@ keystone_group:
     - defaults:
         domain_name: {{ domain_name }}
 
+{%- if domain.ldap.tls.cacert is defined %}
+keystone_domain_{{ domain_name }}_cacert:
+  file.managed:
+    - name: /etc/keystone/domains/{{ domain_name }}.pem
+    - contents_pillar: keystone:server:domain:{{ domain_name }}:tls:cacert
+    - require:
+      - file: /etc/keystone/domains
+    - watch_in:
+      - service: keystone_service
+{%- endif %}
+
 keystone_domain_{{ domain_name }}:
   cmd.run:
     - name: source /root/keystonercv3 && openstack domain create --description "{{ domain.description }}" {{ domain_name }}
