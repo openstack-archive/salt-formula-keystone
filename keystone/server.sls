@@ -78,7 +78,7 @@ keystone_group:
 keystone_domain_{{ domain_name }}_cacert:
   file.managed:
     - name: /etc/keystone/domains/{{ domain_name }}.pem
-    - contents_pillar: keystone:server:domain:{{ domain_name }}:tls:cacert
+    - contents_pillar: keystone:server:domain:{{ domain_name }}:ldap:tls:cacert
     - require:
       - file: /etc/keystone/domains
     - watch_in:
