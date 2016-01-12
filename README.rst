@@ -160,6 +160,23 @@ Keystone fernet tokens for OpenStack Kilo release
           engine: fernet
         ...
 
+Keystone domain with LDAP backend, using SQL for role/project assignment
+
+.. code-block:: yaml
+
+    keystone:
+      server:
+        domain:
+          backend: ldap
+          assignment:
+            backend: sql
+          ldap:
+            url: "ldaps://idm01.workshop.cloudlab.cz"
+            suffix: "dc=workshop,dc=cloudlab,dc=cz"
+            # Will bind as uid=keystone,cn=users,cn=accounts,dc=workshop,dc=cloudlab,dc=cz
+            uid: keystone
+            password: cloudlab
+
 Read more
 =========
 

@@ -54,6 +54,26 @@ keystone_group:
   - watch_in:
     - service: keystone_service
 
+{%- if server.get("domain", {}) %}
+
+/etc/keystone/domains:
+  file.directory:
+    - mode: 0755
+    - require:
+      - pkg: keystone_packages
+
+{%- for domain_name, domain in server.domain.iteritems() %}
+/etc/keystone/domains/keystone.{{ domain_name }}.conf:
+  file.managed:
+    - source: salt://keystone/files/keystone.domain.conf
+    - require:
+      - file: /etc/keystone/domains
+    - watch_in:
+      - service: keystone_service
+{%- endfor %}
+
+{%- endif %}
+
 keystone_service:
   service.running:
   - name: {{ server.service_name }}

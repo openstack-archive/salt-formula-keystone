@@ -832,7 +832,13 @@ key_repository = {{ server.tokens.location }}
 # cannot be deleted on the v3 API, to prevent accidentally breaking the v2 API.
 # There is nothing special about this domain, other than the fact that it must
 # exist to order to maintain support for your v2 clients. (string value)
-#default_domain_id = default
+{%- if server.get('domain' {}) %}
+{%- for name, domain in server.domain.iteritems() %}
+{%- if domain.get('default', False) %}
+default_domain_id = {{ name }}
+{%- endif %}
+{%- endfor %}
+{%- endif %}
 
 # A subset (or all) of domains can have their own identity driver, each with
 # their own partial configuration options, stored in either the resource
@@ -840,7 +846,9 @@ key_repository = {{ server.tokens.location }}
 # setting of domain_configurations_from_database). Only values specific to the
 # domain need to be specified in this manner. This feature is disabled by
 # default; set to true to enable. (boolean value)
-#domain_specific_drivers_enabled = false
+{%- if server.get('domain' {}) %}
+domain_specific_drivers_enabled = true
+{%- endif %}
 
 # Extract the domain specific configuration options from the resource backend
 # where they have been stored with the domain data. This feature is disabled by
@@ -851,7 +859,9 @@ key_repository = {{ server.tokens.location }}
 
 # Path for Keystone to locate the domain specific identity configuration files
 # if domain_specific_drivers_enabled is set to true. (string value)
-#domain_config_dir = /etc/keystone/domains
+{%- if server.get('domain' {}) %}
+domain_config_dir = /etc/keystone/domains
+{%- endif %}
 
 # Entrypoint for the identity backend driver in the keystone.identity
 # namespace. Supplied drivers are ldap and sql. (string value)
