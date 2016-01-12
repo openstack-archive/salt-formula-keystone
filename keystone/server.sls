@@ -66,12 +66,13 @@ keystone_group:
 /etc/keystone/domains/keystone.{{ domain_name }}.conf:
   file.managed:
     - source: salt://keystone/files/keystone.domain.conf
+    - template: jinja
     - require:
       - file: /etc/keystone/domains
     - watch_in:
       - service: keystone_service
     - defaults:
-      - domain_name: {{ domain_name }}
+        domain_name: {{ domain_name }}
 
 keystone_domain_{{ domain_name }}:
   cmd.run:

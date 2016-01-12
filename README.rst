@@ -167,6 +167,7 @@ Keystone domain with LDAP backend, using SQL for role/project assignment
     keystone:
       server:
         domain:
+          description: "Testing domain"
           backend: ldap
           assignment:
             backend: sql
