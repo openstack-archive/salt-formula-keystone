@@ -178,6 +178,22 @@ Keystone domain with LDAP backend, using SQL for role/project assignment
             uid: keystone
             password: cloudlab
 
+Using LDAP backend for default domain
+
+.. code-block:: yaml
+
+    keystone:
+      server:
+        backend: ldap
+        assignment:
+          backend: sql
+        ldap:
+          url: "ldaps://idm01.workshop.cloudlab.cz"
+          suffix: "dc=workshop,dc=cloudlab,dc=cz"
+          # Will bind as uid=keystone,cn=users,cn=accounts,dc=workshop,dc=cloudlab,dc=cz
+          uid: keystone
+          password: cloudlab
+
 Read more
 =========
 
