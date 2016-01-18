@@ -273,6 +273,8 @@ notification_driver=messaging
 #driver = <None>
 {%- if server.get("assignment", {}).get("backend", "sql") == "ldap" %}
 driver = keystone.assignment.backends.ldap.Assignment
+{%- else %}
+driver = keystone.assignment.backends.sql.Assignment
 {%- endif %}
 
 

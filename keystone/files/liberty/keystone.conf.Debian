@@ -286,6 +286,8 @@ notification_driver=messaging
 #driver = <None>
 {%- if server.get("assignment", {}).get("backend", "sql") == "ldap" %}
 driver = ldap
+{%- else %}
+driver = sql
 {%- endif %}
 
 
