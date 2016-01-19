@@ -74,7 +74,7 @@ keystone_group:
     - defaults:
         domain_name: {{ domain_name }}
 
-{%- if domain.ldap.tls.cacert is defined %}
+{%- if domain.get('ldap', {}).get('tls', {}).get('cacert', False) %}
 keystone_domain_{{ domain_name }}_cacert:
   file.managed:
     - name: /etc/keystone/domains/{{ domain_name }}.pem
@@ -94,6 +94,17 @@ keystone_domain_{{ domain_name }}:
       - service: keystone_service
 {%- endfor %}
 
+{%- endif %}
+
+{%- if server.get('ldap', {}).get('tls', {}).get('cacert', False) %}
+keystone_ldap_default_cacert:
+  file.managed:
+    - name: {{ server.ldap.tls.cacertfile }}
+    - contents_pillar: keystone:server:ldap:tls:cacert
+    - require:
+      - pkg: keystone_packages
+    - watch_in:
+      - service: keystone_service
 {%- endif %}
 
 keystone_service:
