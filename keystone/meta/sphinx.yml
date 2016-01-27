@@ -24,7 +24,8 @@ doc:
           protocol: http
       param:
         bind:
-          value: {{ server.bind.address }}:{{ server.bind.port }}
+          value: {{ server.bind.address }}:{{ server.bind.private_port }}
+          value: {{ server.bind.address }}:{{ server.bind.public_port }}
         token_engine:
           value: {{ server.tokens.engine }}
         region:
@@ -37,7 +38,7 @@ doc:
           value: {{ server.version }}
         database_host:
           name: "Database"
-          value: {{ server.database.user }}@{{ server.database.host }}:3306//{{ server.database.name }}
+          value: {{ server.database.user }}@{{ server.database.host }}:3306/{{ server.database.name }}
         services:
           value: |
             {%- for service_name, service in server.get('service', {}).iteritems() %}
