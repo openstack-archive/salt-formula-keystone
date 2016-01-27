@@ -11,9 +11,44 @@ doc:
   {%- from "keystone/map.jinja" import server with context %}
     server:
       name: server
+      endpoint:
+        keystone_api_admin:
+          name: keystone-api-admin
+          type: keystone-api-admin
+          address: http://{{ server.bind.address }}:{{ server.bind.private_port }}
+          protocol: http
+        keystone_api_public:
+          name: keystone-api-public
+          type: keystone-api-public
+          address: http://{{ server.bind.address }}:{{ server.bind.public_port }}
+          protocol: http
       param:
+        bind:
+          value: {{ server.bind.address }}:{{ server.bind.port }}
         token_engine:
           value: {{ server.tokens.engine }}
+        region:
+          name: "Region"
+          value: {{ server.region }}
+        service_tenant:
+          value: {{ server.service_tenant }}
+        version:
+          name: "Version"
+          value: {{ server.version }}
+        database_host:
+          name: "Database"
+          value: {{ server.database.user }}@{{ server.database.host }}:{{ server.database.port }}//{{ server.database.name }}
+        services:
+          value: |
+            {%- for service_name, service in server.get('service', {}).iteritems() %}
+            * {{ service_name }}: {{ service.type }}, publicurl '{{ service.bind.get('public_protocol', 'http') }}://{{ service.bind.public_address }}:{{ service.bind.public_port }}{{ service.bind.public_path }}'
+            {%- endfor %}
+        packages:
+          value: |
+            {%- for pkg in server.pkgs %}
+            {%- set pkg_version = "dpkg -l "+pkg+" | grep "+pkg+" | awk '{print $3}'" %}
+            * {{ pkg }}: {{ salt['cmd.run'](pkg_version) }}
+            {%- endfor %}
   {%- endif %}
   {%- if pillar.keystone.control is defined %}
     control:
