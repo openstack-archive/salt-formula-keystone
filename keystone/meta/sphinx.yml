@@ -37,7 +37,7 @@ doc:
           value: {{ server.version }}
         database_host:
           name: "Database"
-          value: {{ server.database.user }}@{{ server.database.host }}:{{ server.database.port }}//{{ server.database.name }}
+          value: {{ server.database.user }}@{{ server.database.host }}:3306//{{ server.database.name }}
         services:
           value: |
             {%- for service_name, service in server.get('service', {}).iteritems() %}
