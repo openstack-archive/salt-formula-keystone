@@ -28,7 +28,7 @@ parameters:
         user: 'keystone'
       tokens:
         engine: cache
-        expiration: 86400
+        expiration: 43200
         location: /etc/keystone/fernet-keys/
       cache:
         engine: memcached

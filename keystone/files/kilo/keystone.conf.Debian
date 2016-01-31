@@ -1420,7 +1420,7 @@ servers = ['{{ server.cache.host }}:{{ server.cache.port }}']
 
 # Amount of time a token should remain valid (in seconds). (integer value)
 #expiration = 3600
-expiration = 43200
+expiration = {{ server.tokens.expiration }}
 # Controls the token construction, validation, and revocation operations. Core
 # providers are "keystone.token.providers.[fernet|pkiz|pki|uuid].Provider".
 # (string value)
