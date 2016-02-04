@@ -4,9 +4,9 @@ Upstream-Contact: Jakub Pavlik <jakub.pavlik@tcpcloud.eu>
 Source: https://github.com/tcpcloud/salt-formula-keystone
 
 Files: *
-Copyright: 2014-2015 tcp cloud
+Copyright: 2014-2016 tcp cloud
 License: Apache-2.0
-  Copyright (C) 2014-2015 tcp cloud
+  Copyright (C) 2014-2016 tcp cloud
   .
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
