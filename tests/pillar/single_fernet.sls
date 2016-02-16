@@ -24,6 +24,7 @@ keystone:
     tokens:
       engine: fernet
       expiration: 86400
+      location: /etc/keystone/fernet-keys/
     cache:
       engine: memcached
       members: 
