@@ -136,9 +136,10 @@ keystone_syncdb:
 
 {% if server.tokens.engine == 'fernet' %}
 
-/etc/keystone/fernet-keys:
+keystone_fernet_keys:
   file.directory:
-  - mode: 755
+  - name: {{ server.tokens.location }}
+  - mode: 750
   - user: keystone
   - group: keystone
   - require:
@@ -151,6 +152,7 @@ keystone_fernet_setup:
   - name: keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
   - require:
     - service: keystone_service
+    - file: keystone_fernet_keys
 
 {% endif %}
 
