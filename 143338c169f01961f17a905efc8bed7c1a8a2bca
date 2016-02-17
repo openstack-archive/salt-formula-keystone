@@ -1,0 +1,8 @@
+Code-Review+2: Filip Pytloun <filip@pytloun.cz>
+Workflow+1: Filip Pytloun <filip@pytloun.cz>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Wed, 17 Feb 2016 11:47:49 +0000
+Reviewed-on: https://review.openstack.org/280850
+Project: openstack/salt-formula-keystone
+Branch: refs/heads/master
