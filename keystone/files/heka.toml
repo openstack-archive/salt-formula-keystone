@@ -1,0 +1,22 @@
+{%- if pillar.keystone.server is defined %}
+[logstreamer_keystone]
+type = "LogstreamerInput"
+log_directory = "/var/log/keystone"
+file_match = 'keystone\.log\.?(?P<Index>\d+)?(.gz)?'
+priority = ["^Index"]
+decoder = "keystone"
+oldest_duration = "168h"
+
+[logstreamer_keystone_manage]
+type = "LogstreamerInput"
+log_directory = "/var/log/keystone"
+file_match = 'keystone-manage\.log\.?(?P<Index>\d+)?(.gz)?'
+priority = ["^Index"]
+decoder = "keystone"
+oldest_duration = "168h"
+
+[keystone]
+type = "SandboxDecoder"
+filename = "lua_modules/decoders/openstack.lua"
+module_directory = "/usr/share/heka/lua_modules;/usr/share/heka/lua_modules/common"
+{% endif %}
