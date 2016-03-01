@@ -1,0 +1,10 @@
+Code-Review+1: Jakub Pavlik <pavlk.jakub@gmail.com>
+Workflow+1: Jakub Pavlik <pavlk.jakub@gmail.com>
+Code-Review+2: Ales Komarek <ales.komarek@tcpcloud.eu>
+Workflow+1: Ales Komarek <ales.komarek@tcpcloud.eu>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Tue, 01 Mar 2016 11:53:06 +0000
+Reviewed-on: https://review.openstack.org/282361
+Project: openstack/salt-formula-keystone
+Branch: refs/heads/master
