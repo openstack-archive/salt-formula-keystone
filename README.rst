@@ -18,6 +18,10 @@ From Kilo release Keystone v3 endpoint has definition without version in url
 Sample pillars
 ==============
 
+.. caution:: 
+
+    When you use localhost as your database host (keystone:server:database:host), sqlalchemy will try to connect to /var/run/mysql/mysqld.sock, may cause issues if you located your mysql socket elsewhere
+
 Full stacked keystone
 
 .. code-block:: yaml
