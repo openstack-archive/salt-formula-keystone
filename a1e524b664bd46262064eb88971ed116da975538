@@ -1,0 +1,8 @@
+Code-Review+2: Jakub Pavlik <pavlk.jakub@gmail.com>
+Workflow+1: Jakub Pavlik <pavlk.jakub@gmail.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Tue, 15 Mar 2016 17:02:28 +0000
+Reviewed-on: https://review.openstack.org/292988
+Project: openstack/salt-formula-keystone
+Branch: refs/heads/master
