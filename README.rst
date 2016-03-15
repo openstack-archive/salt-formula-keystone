@@ -172,11 +172,11 @@ Keystone domain with LDAP backend, using SQL for role/project assignment
           assignment:
             backend: sql
           ldap:
-            url: "ldaps://idm01.workshop.cloudlab.cz"
+            url: "ldaps://idm.domain.com"
             suffix: "dc=workshop,dc=cloudlab,dc=cz"
             # Will bind as uid=keystone,cn=users,cn=accounts,dc=workshop,dc=cloudlab,dc=cz
             uid: keystone
-            password: cloudlab
+            password: password
 
 Using LDAP backend for default domain
 
@@ -192,7 +192,41 @@ Using LDAP backend for default domain
           suffix: "dc=workshop,dc=cloudlab,dc=cz"
           # Will bind as uid=keystone,cn=users,cn=accounts,dc=workshop,dc=cloudlab,dc=cz
           uid: keystone
-          password: cloudlab
+          password: password
+
+Simple service endpoint definition (defaults to RegionOne)
+
+.. code-block:: yaml
+
+    keystone:
+      server:
+        service:
+          ceilometer:
+            type: metering
+            description: OpenStack Telemetry Service
+            user:
+              name: ceilometer
+              password: password
+            bind:
+              ...
+
+Region-aware service endpoint definition
+
+.. code-block:: yaml
+
+    keystone:
+      server:
+        service:
+          ceilometer_region01:
+            service: ceilometer
+            type: metering
+            region: AnotherRegion
+            description: OpenStack Telemetry Service
+            user:
+              name: ceilometer
+              password: password
+            bind:
+              ...
 
 Read more
 =========

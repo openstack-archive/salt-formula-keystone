@@ -63,6 +63,7 @@ keystone_group:
       - pkg: keystone_packages
 
 {%- for domain_name, domain in server.domain.iteritems() %}
+
 /etc/keystone/domains/keystone.{{ domain_name }}.conf:
   file.managed:
     - source: salt://keystone/files/keystone.domain.conf
@@ -75,6 +76,7 @@ keystone_group:
         domain_name: {{ domain_name }}
 
 {%- if domain.get('ldap', {}).get('tls', {}).get('cacert', False) %}
+
 keystone_domain_{{ domain_name }}_cacert:
   file.managed:
     - name: /etc/keystone/domains/{{ domain_name }}.pem
@@ -83,6 +85,7 @@ keystone_domain_{{ domain_name }}_cacert:
       - file: /etc/keystone/domains
     - watch_in:
       - service: keystone_service
+
 {%- endif %}
 
 keystone_domain_{{ domain_name }}:
@@ -92,11 +95,13 @@ keystone_domain_{{ domain_name }}:
     - require:
       - file: /root/keystonercv3
       - service: keystone_service
+
 {%- endfor %}
 
 {%- endif %}
 
 {%- if server.get('ldap', {}).get('tls', {}).get('cacert', False) %}
+
 keystone_ldap_default_cacert:
   file.managed:
     - name: {{ server.ldap.tls.cacertfile }}
@@ -105,6 +110,7 @@ keystone_ldap_default_cacert:
       - pkg: keystone_packages
     - watch_in:
       - service: keystone_service
+
 {%- endif %}
 
 keystone_service:
@@ -199,7 +205,7 @@ keystone_{{ service_name }}_service:
 
 keystone_{{ service_name }}_endpoint:
   keystone.endpoint_present:
-  - name: {{ service_name }}
+  - name: {{ service.get('service', service_name) }}
   - publicurl: '{{ service.bind.get('public_protocol', 'http') }}://{{ service.bind.public_address }}:{{ service.bind.public_port }}{{ service.bind.public_path }}'
   - internalurl: '{{ service.bind.get('internal_protocol', 'http') }}://{{ service.bind.internal_address }}:{{ service.bind.internal_port }}{{ service.bind.internal_path }}'
   - adminurl: '{{ service.bind.get('admin_protocol', 'http') }}://{{ service.bind.admin_address }}:{{ service.bind.admin_port }}{{ service.bind.admin_path }}'
