@@ -176,11 +176,11 @@ Keystone domain with LDAP backend, using SQL for role/project assignment
           assignment:
             backend: sql
           ldap:
-            url: "ldaps://idm01.workshop.cloudlab.cz"
-            suffix: "dc=workshop,dc=cloudlab,dc=cz"
-            # Will bind as uid=keystone,cn=users,cn=accounts,dc=workshop,dc=cloudlab,dc=cz
+            url: "ldaps://idm.domain.com"
+            suffix: "dc=cloud,dc=domain,dc=com"
+            # Will bind as uid=keystone,cn=users,cn=accounts,dc=cloud,dc=domain,dc=com
             uid: keystone
-            password: cloudlab
+            password: password
 
 Using LDAP backend for default domain
 
@@ -192,11 +192,53 @@ Using LDAP backend for default domain
         assignment:
           backend: sql
         ldap:
-          url: "ldaps://idm01.workshop.cloudlab.cz"
-          suffix: "dc=workshop,dc=cloudlab,dc=cz"
-          # Will bind as uid=keystone,cn=users,cn=accounts,dc=workshop,dc=cloudlab,dc=cz
+          url: "ldaps://idm.domain.com"
+          suffix: "dc=cloud,dc=domain,dc=com"
+          # Will bind as uid=keystone,cn=users,cn=accounts,dc=cloud,dc=domain,dc=com
           uid: keystone
-          password: cloudlab
+          password: password
+
+Simple service endpoint definition (defaults to RegionOne)
+
+.. code-block:: yaml
+
+    keystone:
+      server:
+        service:
+          ceilometer:
+            type: metering
+            description: OpenStack Telemetry Service
+            user:
+              name: ceilometer
+              password: password
+            bind:
+              ...
+
+Region-aware service endpoints definition
+
+.. code-block:: yaml
+
+    keystone:
+      server:
+        service:
+          ceilometer_region01:
+            service: ceilometer
+            type: metering
+            region: region01
+            description: OpenStack Telemetry Service
+            user:
+              name: ceilometer
+              password: password
+            bind:
+              ...
+          ceilometer_region02:
+            service: ceilometer
+            type: metering
+            region: region02
+            description: OpenStack Telemetry Service
+            bind:
+              ...
+
 
 Read more
 =========
@@ -208,13 +250,3 @@ Read more
 * http://www.sebastien-han.fr/blog/2012/12/12/cleanup-keystone-tokens/
 * http://www-01.ibm.com/support/knowledgecenter/SS4KMC_2.2.0/com.ibm.sco.doc_2.2/t_memcached_keystone.html?lang=en
 * https://bugs.launchpad.net/tripleo/+bug/1203910
-
-Things to improve
-=================
-
-* Keystone as service provider (SP) - must be running under Apache (same as with PKI token)
-* Keystone with MongoDB backend - where is it?
-* IdP is owned by domain, domain corresponds to billable account - IdP administration
-* IdP Shiboleth alternatives - mod_auth_mellon
-
-Generally this SP/IdP stuff is a little unstable - how to let SP know identity has changed, no visibility in UI (IBM has some not in upstream yet)
