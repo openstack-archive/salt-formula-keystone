@@ -239,6 +239,21 @@ Region-aware service endpoints definition
             bind:
               ...
 
+Enable ceilometer notifications
+
+.. code-block:: yaml
+
+    keystone:
+      server:
+        notification: true
+        message_queue:
+          engine: rabbitmq
+          host: 127.0.0.1
+          port: 5672
+          user: openstack
+          password: password
+          virtual_host: '/openstack'
+          ha_queues: true
 
 Read more
 =========

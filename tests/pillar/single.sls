@@ -21,6 +21,15 @@ keystone:
       name: 'keystone'
       password: 'password'
       user: 'keystone'
+    notification: true
+    message_queue:
+      engine: rabbitmq
+      host: 127.0.0.1
+      port: 5672
+      user: openstack
+      password: password
+      virtual_host: '/openstack'
+      ha_queues: true
     tokens:
       engine: cache
       expiration: 86400

@@ -32,6 +32,14 @@ parameters:
         engine: cache
         expiration: 43200
         location: /etc/keystone/fernet-keys/
+      message_queue:
+        engine: rabbitmq
+        host: ${_param:cluster_vip_address}
+        port: 5672
+        user: openstack
+        password: ${_param:rabbitmq_openstack_password}
+        virtual_host: '/openstack'
+        ha_queues: true
       cache:
         engine: memcached
         members: 
