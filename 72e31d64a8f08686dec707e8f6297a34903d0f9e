@@ -1,0 +1,8 @@
+Code-Review+2: Ales Komarek <ales.komarek@tcpcloud.eu>
+Workflow+1: Ales Komarek <ales.komarek@tcpcloud.eu>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Mon, 11 Apr 2016 10:20:54 +0000
+Reviewed-on: https://review.openstack.org/303703
+Project: openstack/salt-formula-keystone
+Branch: refs/heads/master
