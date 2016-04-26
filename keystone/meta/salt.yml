@@ -1,0 +1,8 @@
+orchestrate:
+  server:
+    priority: 500
+  client:
+    priority: 510
+  control:
+    priority: 520
+
