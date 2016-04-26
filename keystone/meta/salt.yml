@@ -1,0 +1,10 @@
+orchestrate:
+  server:
+    priority: 500
+    args:
+      - batch: 1
+  client:
+    priority: 510
+  control:
+    priority: 520
+
