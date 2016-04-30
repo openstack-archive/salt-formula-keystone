@@ -20,6 +20,7 @@ admin_token={{ server.service_token }}
 # only need to set this value if the base URL contains a path (e.g. /prefix/v3)
 # or the endpoint should be found on a different server. (string value)
 #public_endpoint = <None>
+public_endpoint = http://{{server.bind.public_address}}:{{ server.bind.public_port}}/
 
 # The base admin endpoint URL for Keystone that is advertised to clients (NOTE:
 # this does NOT affect how Keystone listens for connections). Defaults to the
@@ -28,6 +29,7 @@ admin_token={{ server.service_token }}
 # if the base URL contains a path (e.g. /prefix/v3) or the endpoint should be
 # found on a different server. (string value)
 #admin_endpoint = <None>
+private_endpoint = http://{{server.bind.private_address}}:{{ server.bind.private_port}}/
 
 # Maximum depth of the project hierarchy. WARNING: setting it to a large value
 # may adversely impact performance. (integer value)

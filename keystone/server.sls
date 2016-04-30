@@ -5,23 +5,24 @@ keystone_packages:
   pkg.installed:
   - names: {{ server.pkgs }}
 
-{%- if not salt['user.info']('keystone') %}
+{%- if not salt['user.info'](server.user.name) %}
 
 keystone_user:
   user.present:
-    - name: keystone
-    - home: /var/lib/keystone
-    - uid: 301
-    - gid: 301
-    - shell: /bin/false
+    - name: {{server.user.name}}
+    - home: {{server.user.home}}
+    - uid: {{server.user.uid}}
+    - gid: {{server.group.gid}}
+    - shell: {{server.user.shell}}
+    - fullname: {{server.user.fullname}}
     - system: True
     - require_in:
       - pkg: keystone_packages
 
 keystone_group:
   group.present:
-    - name: keystone
-    - gid: 301
+    - name: {{server.group.name}}
+    - gid: {{server.group.gid}}
     - system: True
     - require_in:
       - pkg: keystone_packages
