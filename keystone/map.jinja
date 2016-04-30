@@ -10,7 +10,18 @@
           'expiration': '86400'
         },
         'notification': False,
-        'roles': ['admin', 'Member']
+        'roles': ['admin', 'Member'],
+        'group': { 
+          'name': 'keystone',
+          'gid': '301',
+        }, 
+        'user': { 
+          'username': 'keystone',
+          'uid': '301',
+          'home': '/var/lib/keystone',
+          'shell': '/bin/false',
+          'fullname': 'OpenStack Keystone Daemons',
+        }, 
     },
     'RedHat': {
         'pkgs': ['openstack-keystone', 'openstack-utils', 'python-keystone', 'python-keystoneclient'],
@@ -22,7 +33,18 @@
           'expiration': '86400'
         },
         'notification': False,
-        'roles': ['admin', 'Member']
+        'roles': ['admin', 'Member'],
+        'group': { 
+          'name': 'keystone',
+          'gid': '163',
+        }, 
+        'user': { 
+          'name': 'keystone',
+          'uid': '163',
+          'home': '/var/lib/keystone',
+          'shell': '/sbin/nologin',
+          'fullname': 'OpenStack Keystone Daemons',
+        }, 
     },
 }, merge=salt['pillar.get']('keystone:server')) %}
 
