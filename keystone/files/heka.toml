@@ -1,4 +1,3 @@
-{%- if pillar.keystone.server is defined %}
 [logstreamer_keystone]
 type = "LogstreamerInput"
 log_directory = "/var/log/keystone"
@@ -12,4 +11,3 @@ oldest_duration = "168h"
 type = "SandboxDecoder"
 filename = "lua_modules/decoders/openstack.lua"
 module_directory = "/usr/share/heka/lua_modules;/usr/share/heka/lua_modules/common"
-{% endif %}
