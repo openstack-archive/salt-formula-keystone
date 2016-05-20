@@ -2,7 +2,10 @@
 OpenStack Keystone
 ==================
 
-Keystone provides authentication, authorization and service discovery mechanisms via HTTP primarily for use by projects in the OpenStack family. It is most commonly deployed as an HTTP interface to existing identity systems, such as LDAP.
+Keystone provides authentication, authorization and service discovery
+mechanisms via HTTP primarily for use by projects in the OpenStack family. It
+is most commonly deployed as an HTTP interface to existing identity systems,
+such as LDAP.
 
 From Kilo release Keystone v3 endpoint has definition without version in url
 
@@ -20,7 +23,9 @@ Sample pillars
 
 .. caution:: 
 
-    When you use localhost as your database host (keystone:server:database:host), sqlalchemy will try to connect to /var/run/mysql/mysqld.sock, may cause issues if you located your mysql socket elsewhere
+    When you use localhost as your database host (keystone:server:
+    atabase:host), sqlalchemy will try to connect to /var/run/mysql/
+    mysqld.sock, may cause issues if you located your mysql socket elsewhere
 
 Full stacked keystone
 
@@ -255,13 +260,28 @@ Enable ceilometer notifications
           virtual_host: '/openstack'
           ha_queues: true
 
-Read more
-=========
+Documentation and Bugs
+============================
 
-* http://docs.openstack.org/developer/keystone/configuration.html
-* http://docs.openstack.org/developer/keystone/architecture.html
-* http://docs.saltstack.com/ref/states/all/salt.states.keystone.html
-* http://docs.saltstack.com/ref/modules/all/salt.modules.keystone.html
-* http://www.sebastien-han.fr/blog/2012/12/12/cleanup-keystone-tokens/
-* http://www-01.ibm.com/support/knowledgecenter/SS4KMC_2.2.0/com.ibm.sco.doc_2.2/t_memcached_keystone.html?lang=en
-* https://bugs.launchpad.net/tripleo/+bug/1203910
+To learn how to deploy OpenStack Salt, consult the documentation available
+online at:
+
+    https://wiki.openstack.org/wiki/OpenStackSalt
+
+In the unfortunate event that bugs are discovered, they should be reported to
+the appropriate bug tracker. If you obtained the software from a 3rd party
+operating system vendor, it is often wise to use their own bug tracker for
+reporting problems. In all other cases use the master OpenStack bug tracker,
+available at:
+
+    http://bugs.launchpad.net/openstack-salt
+
+Developers wishing to work on the OpenStack Salt project should always base
+their work on the latest formulas code, available from the master GIT
+repository at:
+
+    https://git.openstack.org/cgit/openstack/salt-formula-keystone
+
+Developers should also join the discussion on the IRC list, at:
+
+    https://wiki.openstack.org/wiki/Meetings/openstack-salt
