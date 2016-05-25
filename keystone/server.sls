@@ -43,16 +43,20 @@ keystone_group:
   - template: jinja
   - require:
     - pkg: keystone_packages
+  {%- if not grains.get('noservices', False) %}
   - watch_in:
     - service: keystone_service
+  {%- endif %}
 
 /etc/keystone/policy.json:
   file.managed:
   - source: salt://keystone/files/{{ server.version }}/policy-v{{ server.api_version }}.json
   - require:
     - pkg: keystone_packages
+  {%- if not grains.get('noservices', False) %}
   - watch_in:
     - service: keystone_service
+  {%- endif %}
 
 {%- if server.get("domain", {}) %}
 
@@ -70,8 +74,10 @@ keystone_group:
     - template: jinja
     - require:
       - file: /etc/keystone/domains
+    {%- if not grains.get('noservices', False) %}
     - watch_in:
       - service: keystone_service
+    {%- endif %}
     - defaults:
         domain_name: {{ domain_name }}
 
@@ -83,11 +89,14 @@ keystone_domain_{{ domain_name }}_cacert:
     - contents_pillar: keystone:server:domain:{{ domain_name }}:ldap:tls:cacert
     - require:
       - file: /etc/keystone/domains
+    {%- if not grains.get('noservices', False) %}
     - watch_in:
       - service: keystone_service
+    {%- endif %}
 
 {%- endif %}
 
+{%- if not grains.get('noservices', False) %}
 keystone_domain_{{ domain_name }}:
   cmd.run:
     - name: source /root/keystonercv3 && openstack domain create --description "{{ domain.description }}" {{ domain_name }}
@@ -95,6 +104,7 @@ keystone_domain_{{ domain_name }}:
     - require:
       - file: /root/keystonercv3
       - service: keystone_service
+{%- endif %}
 
 {%- endfor %}
 
@@ -108,17 +118,30 @@ keystone_ldap_default_cacert:
     - contents_pillar: keystone:server:ldap:tls:cacert
     - require:
       - pkg: keystone_packages
+    {%- if not grains.get('noservices', False) %}
     - watch_in:
       - service: keystone_service
+    {%- endif %}
 
 {%- endif %}
 
+{%- if not grains.get('noservices', False) %}
 keystone_service:
   service.running:
   - name: {{ server.service_name }}
   - enable: True
   - watch:
     - file: /etc/keystone/keystone.conf
+{%- endif %}
+
+{%- if grains.get('virtual_subtype', None) == "Docker" %}
+keystone_entrypoint:
+  file.managed:
+  - name: /entrypoint.sh
+  - template: jinja
+  - source: salt://keystone/files/entrypoint.sh
+  - mode: 755
+{%- endif %}
 
 /root/keystonerc:
   file.managed:
@@ -134,11 +157,13 @@ keystone_service:
   - require:
     - pkg: keystone_packages
 
+{%- if not grains.get('noservices', False) %}
 keystone_syncdb:
   cmd.run:
   - name: keystone-manage db_sync
   - require:
     - service: keystone_service
+{%- endif %}
 
 {% if server.tokens.engine == 'fernet' %}
 
@@ -153,15 +178,18 @@ keystone_fernet_keys:
   - require_in:
     - service: keystone_fernet_setup
 
+{%- if not grains.get('noservices', False) %}
 keystone_fernet_setup:
   cmd.run:
   - name: keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
   - require:
     - service: keystone_service
     - file: keystone_fernet_keys
+{%- endif %}
 
 {% endif %}
 
+{%- if not grains.get('noservices', False) %}
 keystone_service_tenant:
   keystone.tenant_present:
   - name: {{ server.service_tenant }}
@@ -260,5 +288,6 @@ keystone_user_{{ user_name }}:
 {%- endfor %}
 
 {%- endfor %}
+{%- endif %} {# end noservices #}
 
 {%- endif %}
