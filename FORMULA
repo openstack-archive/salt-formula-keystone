@@ -1,0 +1,8 @@
+name: keystone
+os: Debian, RedHat
+os_family: Debian, RedHat
+version: 201606
+release: 1
+summary: Formula for installing and configuring keystone
+description: Formula for installing and configuring keystone
+top_level_dir: keystone
