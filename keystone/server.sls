@@ -167,7 +167,7 @@ keystone_entrypoint:
 {%- if not grains.get('noservices', False) %}
 keystone_syncdb:
   cmd.run:
-  - name: keystone-manage db_sync
+  - name: keystone-manage db_sync; sleep 1
   - require:
     - service: keystone_service
 {%- endif %}
