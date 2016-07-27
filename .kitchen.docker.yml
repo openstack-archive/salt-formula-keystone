@@ -1,0 +1,12 @@
+---
+driver:
+  name: docker
+  hostname: keystone.ci.local
+  use_sudo: false
+
+
+
+provisioner:
+  grains:
+    noservices: True
+

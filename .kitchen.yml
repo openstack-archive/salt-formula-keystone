@@ -1,0 +1,58 @@
+---
+driver:
+  name: vagrant
+  vm_hostname: keystone.ci.local
+  use_sudo: false
+  customize:
+    memory: 512
+
+
+provisioner:
+  name: salt_solo
+  salt_install: bootstrap
+  salt_bootstrap_url: https://bootstrap.saltstack.com
+  salt_version: latest
+  formula: keystone
+  log_level: info
+  state_top:
+    base:
+      "*":
+        - keystone
+  pillars:
+    top.sls:
+      base:
+        "*":
+          - keystone
+  grains:
+    noservices: False
+
+
+verifier:
+  name: inspec
+  sudo: true
+
+
+platforms:
+  - name: ubuntu-14.04
+  - name: ubuntu-16.04
+  #- name: centos-7.1
+
+
+suites:
+
+  - name: cluster
+    provisioner:
+      pillars-from-files:
+        keystone.sls: tests/pillar/cluster.sls
+
+  - name: single_fernet
+    provisioner:
+      pillars-from-files:
+        keystone.sls: tests/pillar/single_fernet.sls
+
+  - name: single
+    provisioner:
+      pillars-from-files:
+        keystone.sls: tests/pillar/single.sls
+
+# vim: ft=yaml sw=2 ts=2 sts=2 tw=125
