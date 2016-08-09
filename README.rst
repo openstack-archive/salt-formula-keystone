@@ -226,7 +226,7 @@ Region-aware service endpoints definition
     keystone:
       server:
         service:
-          ceilometer_region01:
+          ceilometer:
             service: ceilometer
             type: metering
             region: region01
@@ -236,7 +236,14 @@ Region-aware service endpoints definition
               password: password
             bind:
               ...
-          ceilometer_region02:
+          ceilometer_instance01:
+            service: ceilometer
+            type: metering
+            region: region02
+            description: OpenStack Telemetry Service
+            bind:
+              ...
+          ceilometer_instance02:
             service: ceilometer
             type: metering
             region: region02
