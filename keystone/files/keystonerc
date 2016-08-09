@@ -3,5 +3,6 @@ export OS_USERNAME={{ server.admin_name }}
 export OS_PASSWORD={{ server.admin_password }}
 export OS_TENANT_NAME={{ server.admin_tenant }}
 export OS_AUTH_URL=http://{{ server.bind.private_address }}:{{ server.bind.private_port }}/v2.0
+export OS_REGION_NAME={{ server.region }}
 export OS_SERVICE_TOKEN={{ server.service_token }}
 export OS_SERVICE_ENDPOINT="http://{{ server.bind.private_address }}:{{ server.bind.private_port }}/v2.0/"
