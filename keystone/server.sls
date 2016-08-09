@@ -232,24 +232,25 @@ keystone_admin_user:
     - keystone: keystone_roles
 
 {% for service_name, service in server.get('service', {}).iteritems() %}
+{% set region = service.get('region', 'RegionOne') %}
 
-keystone_{{ service_name }}_service:
+keystone_{{ service_name }}_{{ region|lower }}_service:
   keystone.service_present:
-  - name: {{ service_name }}
+  - name: {{ service_name }}_{{ region|lower }}
   - service_type: {{ service.type }}
   - description: {{ service.description }}
   - require:
     - keystone: keystone_roles
 
-keystone_{{ service_name }}_endpoint:
+keystone_{{ service_name }}_{{ region|lower }}_endpoint:
   keystone.endpoint_present:
-  - name: {{ service.get('service', service_name) }}
+  - name: {{ service.get('service', service_name) }}_{{ region|lower }}
   - publicurl: '{{ service.bind.get('public_protocol', 'http') }}://{{ service.bind.public_address }}:{{ service.bind.public_port }}{{ service.bind.public_path }}'
   - internalurl: '{{ service.bind.get('internal_protocol', 'http') }}://{{ service.bind.internal_address }}:{{ service.bind.internal_port }}{{ service.bind.internal_path }}'
   - adminurl: '{{ service.bind.get('admin_protocol', 'http') }}://{{ service.bind.admin_address }}:{{ service.bind.admin_port }}{{ service.bind.admin_path }}'
-  - region: {{ service.get('region', 'RegionOne') }}
+  - region: {{ region }}
   - require:
-    - keystone: keystone_{{ service_name }}_service
+    - keystone: keystone_{{ service_name }}_{{ region|lower }}_service
     - file: keystone_salt_config
 
 {% if service.user is defined %}
