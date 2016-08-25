@@ -663,14 +663,14 @@ max_retries=-1
 # Deprecated group/name - [DEFAULT]/public_workers
 # This option is deprecated for removal.
 # Its value may be silently ignored in the future.
-#public_workers = <None>
+public_workers={{ server.get('public_workers', '4') }}
 
 # The number of worker processes to serve the admin eventlet application.
 # Defaults to number of CPUs (minimum of 2). (integer value)
 # Deprecated group/name - [DEFAULT]/admin_workers
 # This option is deprecated for removal.
 # Its value may be silently ignored in the future.
-#admin_workers = <None>
+admin_workers={{ server.get('admin_workers', '4') }}
 
 # The IP address of the network interface for the public service to listen on.
 # (string value)

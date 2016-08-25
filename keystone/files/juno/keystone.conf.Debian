@@ -69,12 +69,12 @@ admin_bind_host={% if server.bind.address is defined %}{{ server.bind.address }}
 # The number of worker processes to serve the public WSGI
 # application. Defaults to number of CPUs (minimum of 2).
 # (integer value)
-#public_workers=<None>
+public_workers={{ server.get('public_workers', '4') }}
 
 # The number of worker processes to serve the admin WSGI
 # application. Defaults to number of CPUs (minimum of 2).
 # (integer value)
-#admin_workers=<None>
+admin_workers={{ server.get('admin_workers', '4') }}
 
 # Enforced by optional sizelimit middleware
 # (keystone.middleware:RequestBodySizeLimiter). (integer
