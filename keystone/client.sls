@@ -5,7 +5,7 @@ keystone_client_packages:
   pkg.installed:
   - names: {{ client.pkgs }}
 
-keystone_salt_config:
+keystone_salt_client_config:
   file.managed:
     - name: /etc/salt/minion.d/keystone.conf
     - template: jinja
@@ -18,7 +18,7 @@ keystone_client_roles:
   keystone.role_present:
   - names: {{ client.roles }}
   - require:
-    - file: keystone_salt_config
+    - file: keystone_salt_client_config
 
 {%- for tenant_name, tenant in client.get('tenant', {}).iteritems() %}
 
