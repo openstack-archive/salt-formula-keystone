@@ -823,7 +823,7 @@ key_repository = {{ server.tokens.location }}
 # key. Increasing this value means that additional secondary keys will be kept
 # in the rotation. (integer value)
 #max_active_keys = 3
-
+max_active_keys={{ server.tokens.get('max_active_keys', '3') }}
 
 [identity]
 

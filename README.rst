@@ -167,6 +167,7 @@ Keystone fernet tokens for OpenStack Kilo release
         ...
         tokens:
           engine: fernet
+          max_active_keys: 3
         ...
 
 Keystone domain with LDAP backend, using SQL for role/project assignment

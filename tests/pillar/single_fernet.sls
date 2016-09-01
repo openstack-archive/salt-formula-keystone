@@ -25,6 +25,7 @@ keystone:
       engine: fernet
       expiration: 86400
       location: /etc/keystone/fernet-keys/
+      max_active_keys: 4
     cache:
       engine: memcached
       members: 
