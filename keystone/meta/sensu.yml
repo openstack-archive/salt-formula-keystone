@@ -1,6 +1,6 @@
 check:
   local_keystone_server_proc:
-    command: "PATH=$PATH:/usr/lib64/nagios/plugins:/usr/lib/nagios/plugins check_procs -C keystone-all -u keystone -c 1:20"
+    command: "PATH=$PATH:/usr/lib64/nagios/plugins:/usr/lib/nagios/plugins check_procs -C keystone-all -u keystone -c 1:1024"
     interval: 60
     occurrences: 1
     subscribers:
