@@ -200,6 +200,8 @@ keystone_fernet_setup:
 keystone_service_tenant:
   keystone.tenant_present:
   - name: {{ server.service_tenant }}
+  - connection_token: {{ server.service_token }}
+  - connection_endpoint: 'http://{{ server.bind.address }}:{{ server.bind.private_port }}/v2.0'
   - require:
     - cmd: keystone_syncdb
     - file: keystone_salt_config
@@ -207,12 +209,16 @@ keystone_service_tenant:
 keystone_admin_tenant:
   keystone.tenant_present:
   - name: {{ server.admin_tenant }}
+  - connection_token: {{ server.service_token }}
+  - connection_endpoint: 'http://{{ server.bind.address }}:{{ server.bind.private_port }}/v2.0'
   - require:
     - keystone: keystone_service_tenant
 
 keystone_roles:
   keystone.role_present:
   - names: {{ server.roles }}
+  - connection_token: {{ server.service_token }}
+  - connection_endpoint: 'http://{{ server.bind.address }}:{{ server.bind.private_port }}/v2.0'
   - require:
     - keystone: keystone_service_tenant
 
@@ -225,6 +231,8 @@ keystone_admin_user:
   - roles:
       {{ server.admin_tenant }}:
       - admin
+  - connection_token: {{ server.service_token }}
+  - connection_endpoint: 'http://{{ server.bind.address }}:{{ server.bind.private_port }}/v2.0'
   - require:
     - keystone: keystone_admin_tenant
     - keystone: keystone_roles
@@ -236,6 +244,8 @@ keystone_{{ service_name }}_service:
   - name: {{ service_name }}
   - service_type: {{ service.type }}
   - description: {{ service.description }}
+  - connection_token: {{ server.service_token }}
+  - connection_endpoint: 'http://{{ server.bind.address }}:{{ server.bind.private_port }}/v2.0'
   - require:
     - keystone: keystone_roles
 
@@ -246,6 +256,8 @@ keystone_{{ service_name }}_endpoint:
   - internalurl: '{{ service.bind.get('internal_protocol', 'http') }}://{{ service.bind.internal_address }}:{{ service.bind.internal_port }}{{ service.bind.internal_path }}'
   - adminurl: '{{ service.bind.get('admin_protocol', 'http') }}://{{ service.bind.admin_address }}:{{ service.bind.admin_port }}{{ service.bind.admin_path }}'
   - region: {{ service.get('region', 'RegionOne') }}
+  - connection_token: {{ server.service_token }}
+  - connection_endpoint: 'http://{{ server.bind.address }}:{{ server.bind.private_port }}/v2.0'
   - require:
     - keystone: keystone_{{ service_name }}_service
     - file: keystone_salt_config
@@ -261,6 +273,8 @@ keystone_user_{{ service.user.name }}:
   - roles:
       {{ server.service_tenant }}:
       - admin
+  - connection_token: {{ server.service_token }}
+  - connection_endpoint: 'http://{{ server.bind.address }}:{{ server.bind.private_port }}/v2.0'
   - require:
     - keystone: keystone_roles
 
@@ -273,6 +287,8 @@ keystone_user_{{ service.user.name }}:
 keystone_tenant_{{ tenant_name }}:
   keystone.tenant_present:
   - name: {{ tenant_name }}
+  - connection_token: {{ server.service_token }}
+  - connection_endpoint: 'http://{{ server.bind.address }}:{{ server.bind.private_port }}/v2.0'
   - require:
     - keystone: keystone_roles
 
@@ -291,6 +307,8 @@ keystone_user_{{ user_name }}:
       {%- else %}
       - Member
       {%- endif %}
+  - connection_token: {{ server.service_token }}
+  - connection_endpoint: 'http://{{ server.bind.address }}:{{ server.bind.private_port }}/v2.0'
   - require:
     - keystone: keystone_tenant_{{ tenant_name }}
 
