@@ -24,7 +24,7 @@
         'notification': False,
         'roles': ['admin', 'Member']
     },
-}, merge=salt['pillar.get']('keystone:server')) %}
+}, merge=pillar.keystone.get('server', {})) %}
 
 {% set client = salt['grains.filter_by']({
     'Debian': {
@@ -36,7 +36,7 @@
         'pkgs': ['python-keystoneclient'],
         'roles': ['admin', 'Member'],
     },
-}, merge=salt['pillar.get']('keystone:client')) %}
+}, merge=pillar.keystone.get('client', {})) %}
 
 {% set control = salt['grains.filter_by']({
     'Debian': {
@@ -45,4 +45,4 @@
     'RedHat': {
         'pkgs': [],
     },
-}, merge=salt['pillar.get']('keystone:control')) %}
+}, merge=pillar.keystone.get('control', {})) %}
