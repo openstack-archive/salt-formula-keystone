@@ -1,0 +1,13 @@
+config:
+  {%- if pillar.keystone.server is defined %}
+  {%- from "keystone/map.jinja" import server with context %}
+  keystone.conf:
+    source: "salt://keystone/files/{{ server.version }}/keystone.conf.{{ grains.os_family|default('Debian') }}"
+    template: jinja
+  keystone-paste.ini:
+    source: "salt://keystone/files/{{ server.version }}/keystone-paste.ini.{{ grains.os_family|default('Debian') }}"
+    template: jinja
+  policy.json:
+    source: "salt://keystone/files/{{ server.version }}/policy-v{{ server.api_version }}.json"
+    template: jinja
+  {%- endif %}

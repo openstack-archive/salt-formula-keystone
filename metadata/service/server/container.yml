@@ -1,0 +1,44 @@
+parameters:
+  kubernetes:
+    control:
+      configmap:
+        keystone-server:
+          grains:
+            os_family: Debian
+          pillar:
+            keystone:
+              server:
+                enabled: true
+                version: ${_param:keystone_version}
+                service_token: ${_param:keystone_service_token}
+                service_tenant: service
+                admin_tenant: admin
+                admin_name: admin
+                admin_password: ${_param:keystone_admin_password}
+                admin_email: root@localhost
+                bind:
+                  address: 0.0.0.0
+                  private_address: ${_param:keystone_service_host}
+                  private_port: 35357
+                  public_address: ${_param:keystone_service_host}
+                  public_port: 5000
+                region: RegionOne
+                database:
+                  engine: mysql
+                  host: ${_param:mysql_service_host}
+                  port: 3306
+                  name: 'keystone'
+                  password: '${_param:mysql_keystone_password}'
+                  user: 'keystone'
+                tokens:
+                  engine: fernet
+                  expiration: 43200
+                  location: /etc/keystone/fernet-keys/
+                message_queue:
+                  engine: rabbitmq
+                  host: ${_param:rabbitmq_service_host}
+                  port: 5672
+                  user: openstack
+                  password: ${_param:rabbitmq_openstack_password}
+                  virtual_host: '/openstack'
+                  ha_queues: true
