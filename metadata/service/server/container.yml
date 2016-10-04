@@ -33,7 +33,7 @@ parameters:
                 tokens:
                   engine: fernet
                   expiration: 43200
-                  location: /etc/keystone/fernet-keys/
+                  location: /var/lib/keystone/fernet-keys
                 message_queue:
                   engine: rabbitmq
                   host: ${_param:rabbitmq_service_host}
