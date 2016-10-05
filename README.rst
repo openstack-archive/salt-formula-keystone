@@ -261,8 +261,73 @@ Enable ceilometer notifications
           virtual_host: '/openstack'
           ha_queues: true
 
+
+Keystone client
+---------------
+
+Service endpoints enforcement with service token
+
+.. code-block:: yaml
+
+    keystone:
+      client:
+        enabled: true
+        server:
+          keystone01:
+            admin:
+              host: 10.0.0.2
+              port: 35357
+              token: 'service_token'
+            service:
+              nova:
+                type: compute
+                description: OpenStack Compute Service
+                endpoint:
+                  region01:
+                    public_address: 172.16.10.1
+                    public_port: 8773
+                    public_path: '/v2'
+                    internal_address: 172.16.10.1
+                    internal_port: 8773
+                    internal_path: '/v2'
+                    admin_address: 172.16.10.1
+                    admin_port: 8773
+                    admin_path: '/v2'
+
+Project, users, roles enforcement with admin user
+
+.. code-block:: yaml
+
+    keystone:
+      client:
+        enabled: true
+        server:
+          keystone01:
+            admin:
+              host: 10.0.0.2
+              port: 5000
+              project: 'token'
+              user: admin
+              password: 'passwd'
+            roles:
+            - admin
+            - member
+            project:
+              tenant01:
+                description: "test env"
+                user:
+                  user01:
+                    email: jdoe@domain.com
+                    is_admin: true
+                    password: some
+                  user02:
+                    email: jdoe2@domain.com
+                    password: some
+                    roles:
+                    - custom-roles
+
 Documentation and Bugs
-============================
+======================
 
 To learn how to deploy OpenStack Salt, consult the documentation available
 online at:
