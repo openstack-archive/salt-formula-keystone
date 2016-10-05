@@ -1,9 +1,7 @@
 {%- from "keystone/map.jinja" import client with context %}
 {%- if client.enabled %}
 
-keystone_client_packages:
-  pkg.installed:
-  - names: {{ client.pkgs }}
+{%- if client.tenant is defined %}
 
 keystone_salt_config:
   file.managed:
@@ -11,8 +9,6 @@ keystone_salt_config:
     - template: jinja
     - source: salt://keystone/files/salt-minion.conf
     - mode: 600
-
-{%- if client.tenant is defined %}
 
 keystone_client_roles:
   keystone.role_present:
