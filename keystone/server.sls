@@ -197,6 +197,9 @@ keystone_fernet_setup:
 {% endif %}
 
 {%- if not grains.get('noservices', False) %}
+
+{%- if not salt['pillar.get']('linux:system:repo:mirantis_openstack', False) %}
+
 keystone_service_tenant:
   keystone.tenant_present:
   - name: {{ server.service_tenant }}
@@ -237,7 +240,9 @@ keystone_admin_user:
     - keystone: keystone_admin_tenant
     - keystone: keystone_roles
 
-{% for service_name, service in server.get('service', {}).iteritems() %}
+{%- endif %}
+
+{%- for service_name, service in server.get('service', {}).iteritems() %}
 
 keystone_{{ service_name }}_service:
   keystone.service_present:
@@ -280,7 +285,7 @@ keystone_user_{{ service.user.name }}:
 
 {% endif %}
 
-{% endfor %}
+{%- endfor %}
 
 {%- for tenant_name, tenant in server.get('tenant', {}).iteritems() %}
 
