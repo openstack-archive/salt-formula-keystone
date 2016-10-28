@@ -1,0 +1,19 @@
+log_collector:
+  decoder:
+    keystone:
+      engine: sandbox
+      module_file: /usr/share/lma_collector/decoders/openstack_log.lua
+      module_dir: /usr/share/lma_collector/common;/usr/share/heka/lua_modules
+  splitter:
+    keystone:
+      engine: token
+      delimiter: '\n'
+  input:
+    keystone_log:
+      engine: logstreamer
+      log_directory: "/var/log/keystone"
+      file_match: '(?P<Service>.+)\.log\.?(?P<Seq>\d*)$'
+      differentiator: ['keystone', '_', 'Service']
+      priority: ["^Seq"]
+      decoder: "keystone_decoder"
+      splitter: "keystone_splitter"
