@@ -1,4 +1,5 @@
 {%- from "keystone/map.jinja" import server with context %}
+{%- if server.get('enabled', False) %}
 local_plugin:
   collectd_check_local_endpoint:
     endpoint:
@@ -24,3 +25,4 @@ remote_plugin:
     username: {{ server.admin_name }}
     password: {{ server.admin_password }}
     tenant: {{ server.admin_tenant }}
+{%- endif %}
