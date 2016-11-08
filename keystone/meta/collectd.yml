@@ -1,4 +1,13 @@
 {%- from "keystone/map.jinja" import server with context %}
+local_plugin:
+  collectd_check_local_endpoint:
+    endpoint:
+      keystone-public-api:
+        expected_code: 300
+        url: "http://{{ server.bind.address|replace('0.0.0.0', '127.0.0.1') }}:{{ server.bind.public_port }}/"
+      keystone-admin-api:
+        expected_code: 300
+        url: "http://{{ server.bind.address|replace('0.0.0.0', '127.0.0.1') }}:{{ server.bind.private_port }}/"
 
 remote_plugin:
   openstack_keystone:
