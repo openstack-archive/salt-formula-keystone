@@ -1,0 +1,3 @@
+dashboard:
+  keystone:
+    template: keystone/files/grafana_influxdb.json
