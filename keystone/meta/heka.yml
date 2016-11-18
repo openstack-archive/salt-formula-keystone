@@ -1,3 +1,4 @@
+{%- if pillar.keystone.server is defined %}
 log_collector:
   decoder:
     keystone:
@@ -18,3 +19,146 @@ log_collector:
       priority: ["^Seq"]
       decoder: "keystone_decoder"
       splitter: "keystone_splitter"
+metric_collector:
+  trigger:
+    keystone_response_time_duration:
+      description: 'Keystone API is too slow'
+      severity: warning
+      no_data_policy: okay
+      rules:
+      - metric: openstack_keystone_http_response_times
+        field:
+          http_method: '== GET || == POST'
+          http_status: '!= 5xx'
+        relational_operator: '>'
+        threshold: 0.3
+        window: 60
+        periods: 0
+        value: upper_90
+        function: max
+    keystone_logs_error:
+      description: 'Too many errors have been detected in Keystone logs'
+      severity: warning
+      no_data_policy: okay
+      rules:
+      - metric: log_messages
+        field:
+          service: keystone
+          level: error
+        relational_operator: '>'
+        threshold: 0.1
+        window: 70
+        periods: 0
+        function: max
+    {%- for keystone_service in ('public', 'admin') %}
+    keystone_{{ keystone_service }}_api_local_endpoint:
+      description: 'Keystone {{ keystone_service }} API is locally down'
+      severity: down
+      rules:
+      - metric: openstack_check_local_api
+        field:
+          service: keystone-{{ keystone_service }}-api
+        relational_operator: '=='
+        threshold: 0
+        window: 60
+        periods: 0
+        function: last
+    {%- endfor %}
+  alarm:
+    keystone_response_time:
+      alerting: enabled
+      triggers:
+      - keystone_response_time_duration
+      dimension:
+        service: keystone-response-time
+    keystone_logs:
+      alerting: enabled
+      triggers:
+      - keystone_logs_error
+      dimension:
+        service: keystone-logs
+    {%- for keystone_service in ('public', 'admin') %}
+    keystone_{{ keystone_service }}_api_endpoint:
+      alerting: enabled
+      triggers:
+      - keystone_{{ keystone_service }}_api_local_endpoint
+      dimension:
+        service: keystone-{{ keystone_service }}-api-endpoint
+    {%- endfor %}
+remote_collector:
+  trigger:
+    {%- for keystone_service in ('public', 'admin') %}
+    keystone_{{ keystone_service }}_api_check_failed:
+      description: 'Endpoint check for keystone-{{ keystone_service }}-api is failed'
+      severity: down
+      rules:
+      - metric: openstack_check_api
+        field:
+          service: keystone-{{ keystone_service }}-api
+        relational_operator: '=='
+        threshold: 0
+        window: 60
+        periods: 0
+        function: last
+    {%- endfor %}
+  alarm:
+    {%- for keystone_service in ('public', 'admin') %}
+    keystone_{{ keystone_service }}_api_check:
+      alerting: true
+      triggers:
+      - keystone_{{ keystone_service }}_api_check_failed
+      dimension:
+        service: keystone-{{ keystone_service }}-api-check
+    {%- endfor %}
+aggregator:
+  alarm_cluster:
+    keystone_response_time:
+      policy: highest_severity
+      match:
+        service: keystone-response-time
+      members:
+      - keystone_response_time
+      dimension:
+        service: keystone
+    keystone_logs:
+      policy: highest_severity
+      group_by: hostname
+      match:
+        service: keystone-logs
+      members:
+      - keystone_logs
+      dimension:
+        service: keystone
+    {%- for keystone_service in ('public', 'admin') %}
+    keystone_{{ keystone_service }}_api_endpoint:
+      policy: availability_of_members
+      group_by: hostname
+      match:
+        service: keystone-{{ keystone_service }}-api-endpoint
+      members:
+      - keystone_{{ keystone_service }}_api_endpoint
+      dimension:
+        service: keystone
+    keystone_{{ keystone_service }}_api_check:
+      policy: highest_severity
+      match:
+        service: keystone-{{ keystone_service }}-api-check
+      members:
+      - keystone_{{ keystone_service }}_api_check
+      dimension:
+        service: keystone
+    {%- endfor %}
+    keystone:
+      policy: highest_severity
+      match:
+        service: keystone
+      members:
+      - keystone_response_time
+      - keystone_logs
+      {%- for keystone_service in ('public', 'admin') %}
+      - keystone_{{ keystone_service }}_api_endpoint
+      - keystone_{{ keystone_service }}_api_check
+      {%- endfor %}
+      dimension:
+        cluster_name: keystone
+{%- endif %}
