@@ -26,6 +26,8 @@
                            'password': server.admin.password} %}
 {%- endif %}
 
+{%- if server.roles is defined %}
+
 keystone_{{ server_name }}_roles:
   keystone.role_present:
   - names: {{ server.roles }}
@@ -38,6 +40,8 @@ keystone_{{ server_name }}_roles:
   - connection_tenant: {{ connection_args.tenant }}
   - connection_auth_url: {{ connection_args.auth_url }}
   {%- endif %}
+
+{%- endif %}
 
 {% for service_name, service in server.get('service', {}).iteritems() %}
 
