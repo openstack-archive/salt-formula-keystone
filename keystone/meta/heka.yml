@@ -12,8 +12,8 @@ log_collector:
   input:
     keystone_log:
       engine: logstreamer
-      log_directory: "/var/log/keystone"
-      file_match: '(?P<Service>.+)\.log\.?(?P<Seq>\d*)$'
+      log_directory: "/var/log"
+      file_match: 'keystone/(?P<Service>.+)\.log\.?(?P<Seq>\d*)$'
       differentiator: ['keystone', '_', 'Service']
       priority: ["^Seq"]
       decoder: "keystone_decoder"
