@@ -104,7 +104,7 @@ remote_collector:
   alarm:
     {%- for keystone_service in ('public', 'admin') %}
     keystone_{{ keystone_service }}_api_check:
-      alerting: true
+      alerting: enabled
       triggers:
       - keystone_{{ keystone_service }}_api_check_failed
       dimension:
@@ -114,14 +114,17 @@ aggregator:
   alarm_cluster:
     keystone_response_time:
       policy: highest_severity
+      alerting: enabled
       match:
         service: keystone-response-time
       members:
       - keystone_response_time
       dimension:
         service: keystone
+        nagios_host: 01-service-clusters
     keystone_logs:
       policy: highest_severity
+      alerting: enabled
       group_by: hostname
       match:
         service: keystone-logs
@@ -129,9 +132,11 @@ aggregator:
       - keystone_logs
       dimension:
         service: keystone
+        nagios_host: 01-service-clusters
     {%- for keystone_service in ('public', 'admin') %}
     keystone_{{ keystone_service }}_api_endpoint:
       policy: availability_of_members
+      alerting: enabled
       group_by: hostname
       match:
         service: keystone-{{ keystone_service }}-api-endpoint
@@ -139,17 +144,21 @@ aggregator:
       - keystone_{{ keystone_service }}_api_endpoint
       dimension:
         service: keystone
+        nagios_host: 01-service-clusters
     keystone_{{ keystone_service }}_api_check:
       policy: highest_severity
+      alerting: enabled
       match:
         service: keystone-{{ keystone_service }}-api-check
       members:
       - keystone_{{ keystone_service }}_api_check
       dimension:
         service: keystone
+        nagios_host: 01-service-clusters
     {%- endfor %}
     keystone:
       policy: highest_severity
+      alerting: enabled_with_notification
       match:
         service: keystone
       members:
@@ -161,4 +170,5 @@ aggregator:
       {%- endfor %}
       dimension:
         cluster_name: keystone
+        nagios_host: 00-top-clusters
 {%- endif %}
