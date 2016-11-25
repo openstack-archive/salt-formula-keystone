@@ -2,7 +2,7 @@ parameters:
   keystone:
     _support:
       collectd:
-        enabled: false
+        enabled: true
       heka:
         enabled: true
       sensu:
@@ -10,4 +10,6 @@ parameters:
       sphinx:
         enabled: true
       config:
+        enabled: true
+      grafana:
         enabled: true

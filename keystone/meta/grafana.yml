@@ -1,0 +1,4 @@
+dashboard:
+  keystone:
+    format: json
+    template: keystone/files/grafana_dashboards/keystone_influxdb.json

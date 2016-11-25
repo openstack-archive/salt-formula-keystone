@@ -1,0 +1,28 @@
+{%- from "keystone/map.jinja" import server with context %}
+{%- if server.get('enabled', False) %}
+local_plugin:
+  collectd_check_local_endpoint:
+    endpoint:
+      keystone-public-api:
+        expected_code: 300
+        url: "http://{{ server.bind.address|replace('0.0.0.0', '127.0.0.1') }}:{{ server.bind.public_port }}/"
+      keystone-admin-api:
+        expected_code: 300
+        url: "http://{{ server.bind.address|replace('0.0.0.0', '127.0.0.1') }}:{{ server.bind.private_port }}/"
+
+remote_plugin:
+  openstack_keystone:
+    plugin: python
+    template: keystone/files/collectd_openstack_keystone.conf
+    url: "http://{{ server.bind.public_address }}:{{ server.bind.public_port }}/v{% if server.get('api_version', 2)|int == 2 %}2.0{% else %}3{% endif %}"
+    username: {{ server.admin_name }}
+    password: {{ server.admin_password }}
+    tenant: {{ server.admin_tenant }}
+  check_openstack_api:
+    plugin: python
+    template: keystone/files/collectd_check_openstack_api.conf
+    url: "http://{{ server.bind.public_address }}:{{ server.bind.public_port }}/v{% if server.get('api_version', 2)|int == 2 %}2.0{% else %}3{% endif %}"
+    username: {{ server.admin_name }}
+    password: {{ server.admin_password }}
+    tenant: {{ server.admin_tenant }}
+{%- endif %}
