@@ -50,20 +50,18 @@ metric_collector:
         window: 70
         periods: 0
         function: max
-    {%- for keystone_service in ('public', 'admin') %}
-    keystone_{{ keystone_service }}_api_local_endpoint:
-      description: 'Keystone {{ keystone_service }} API is locally down'
+    keystone_public_api_local_endpoint:
+      description: 'Keystone public API is locally down'
       severity: down
       rules:
       - metric: openstack_check_local_api
         field:
-          service: keystone-{{ keystone_service }}-api
+          service: keystone-public-api
         relational_operator: '=='
         threshold: 0
         window: 60
         periods: 0
         function: last
-    {%- endfor %}
   alarm:
     keystone_response_time:
       alerting: enabled
@@ -77,39 +75,33 @@ metric_collector:
       - keystone_logs_error
       dimension:
         service: keystone-logs
-    {%- for keystone_service in ('public', 'admin') %}
-    keystone_{{ keystone_service }}_api_endpoint:
+    keystone_public_api_endpoint:
       alerting: enabled
       triggers:
-      - keystone_{{ keystone_service }}_api_local_endpoint
+      - keystone_public_api_local_endpoint
       dimension:
-        service: keystone-{{ keystone_service }}-api-endpoint
-    {%- endfor %}
+        service: keystone-public-api-endpoint
 remote_collector:
   trigger:
-    {%- for keystone_service in ('public', 'admin') %}
-    keystone_{{ keystone_service }}_api_check_failed:
-      description: 'Endpoint check for keystone-{{ keystone_service }}-api is failed'
+    keystone_public_api_check_failed:
+      description: 'Endpoint check for keystone-public-api is failed'
       severity: down
       rules:
       - metric: openstack_check_api
         field:
-          service: keystone-{{ keystone_service }}-api
+          service: keystone-public-api
         relational_operator: '=='
         threshold: 0
         window: 60
         periods: 0
         function: last
-    {%- endfor %}
   alarm:
-    {%- for keystone_service in ('public', 'admin') %}
-    keystone_{{ keystone_service }}_api_check:
+    keystone_public_api_check:
       alerting: enabled
       triggers:
-      - keystone_{{ keystone_service }}_api_check_failed
+      - keystone_public_api_check_failed
       dimension:
-        service: keystone-{{ keystone_service }}-api-check
-    {%- endfor %}
+        service: keystone-public-api-check
 aggregator:
   alarm_cluster:
     keystone_response_time:
@@ -133,29 +125,27 @@ aggregator:
       dimension:
         service: keystone
         nagios_host: 01-service-clusters
-    {%- for keystone_service in ('public', 'admin') %}
-    keystone_{{ keystone_service }}_api_endpoint:
+    keystone_public_api_endpoint:
       policy: availability_of_members
       alerting: enabled
       group_by: hostname
       match:
-        service: keystone-{{ keystone_service }}-api-endpoint
+        service: keystone-public-api-endpoint
       members:
-      - keystone_{{ keystone_service }}_api_endpoint
+      - keystone_public_api_endpoint
       dimension:
         service: keystone
         nagios_host: 01-service-clusters
-    keystone_{{ keystone_service }}_api_check:
+    keystone_public_api_check:
       policy: highest_severity
       alerting: enabled
       match:
-        service: keystone-{{ keystone_service }}-api-check
+        service: keystone-public-api-check
       members:
-      - keystone_{{ keystone_service }}_api_check
+      - keystone_public_api_check
       dimension:
         service: keystone
         nagios_host: 01-service-clusters
-    {%- endfor %}
     keystone:
       policy: highest_severity
       alerting: enabled_with_notification
@@ -164,10 +154,8 @@ aggregator:
       members:
       - keystone_response_time
       - keystone_logs
-      {%- for keystone_service in ('public', 'admin') %}
-      - keystone_{{ keystone_service }}_api_endpoint
-      - keystone_{{ keystone_service }}_api_check
-      {%- endfor %}
+      - keystone_public_api_endpoint
+      - keystone_public_api_check
       dimension:
         cluster_name: keystone
         nagios_host: 00-top-clusters
