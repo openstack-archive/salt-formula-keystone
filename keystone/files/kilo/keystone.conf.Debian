@@ -97,6 +97,7 @@ secure_proxy_ssl_header = "HTTP_X_FORWARDED_PROTO"
 # notification has the same information, as well as information about the
 # initiator of the event. Valid options are: basic and cadf (string value)
 #notification_format = basic
+notification_format = {{ server.get("notification_format", "basic") }}
 
 #
 # From keystone.openstack.common.eventlet_backdoor

@@ -104,6 +104,7 @@ secure_proxy_ssl_header = "HTTP_X_FORWARDED_PROTO"
 # initiator of the event. (string value)
 # Allowed values: basic, cadf
 #notification_format = basic
+notification_format = {{ server.get("notification_format", "basic") }}
 
 # Define the notification options to opt-out from. The value expected is:
 # identity.<resource_type>.<operation>. This field can be set multiple times in
