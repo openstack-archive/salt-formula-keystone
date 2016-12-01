@@ -233,10 +233,16 @@ log_dir = /var/log/keystone
 
 # The Drivers(s) to handle sending notifications. Possible values are
 # messaging, messagingv2, routing, log, test, noop (multi valued)
-{%- if server.notification %}
 #notification_driver=
+{%- if server.notification is mapping %}
+notification_driver = {{ server.notification.get('driver', 'messagingv2') }}
+{%- if controller.notification.topics is defined %}
+notification_topics = {{ server.notification.topics }}
+{%- endif %}
+{%- elif server.notification %}
 notification_driver=messagingv2
 {%- endif %}
+
 # AMQP topic used for OpenStack notifications. (list value)
 # Deprecated group/name - [rpc_notifier2]/topics
 #notification_topics = notifications

@@ -1456,7 +1456,12 @@ servers = ['{{ server.cache.host }}:{{ server.cache.port }}']
 # messaging, messagingv2, routing, log, test, noop (multi valued)
 # Deprecated group/name - [DEFAULT]/notification_driver
 #driver =
-{%- if server.notification %}
+{%- if server.notification is mapping %}
+notification_driver = {{ server.notification.get('driver', 'messagingv2') }}
+{%- if controller.notification.topics is defined %}
+notification_topics = {{ server.notification.topics }}
+{%- endif %}
+{%- elif server.notification %}
 driver=messagingv2
 {%- endif %}
 
