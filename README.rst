@@ -261,6 +261,15 @@ Enable ceilometer notifications
           virtual_host: '/openstack'
           ha_queues: true
 
+Enable CADF audit notification
+
+.. code-block:: yaml
+
+    keystone:
+      server:
+        notification: true
+        notification_format: cadf
+
 
 Keystone client
 ---------------
