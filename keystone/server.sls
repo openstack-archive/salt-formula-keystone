@@ -5,6 +5,31 @@ keystone_packages:
   pkg.installed:
   - names: {{ server.pkgs }}
 
+{%- if server.service_name == 'apache2' or server.service_name == 'httpd' %}
+
+disable_keystone_service:
+  service.dead:
+  - name: keystone
+  - enable: False
+  - require:
+    - pkg: keystone_packages
+
+/etc/apache2/sites-available/wsgi-keystone.conf:
+  file.managed:
+  - source: salt://keystone/files/{{ server.version }}/wsgi-keystone.conf
+  - template: jinja
+
+/etc/apache2/sites-enabled/wsgi-keystone.conf:
+  file.symlink:
+  - target: /etc/apache2/sites-available/wsgi-keystone.conf
+  - require:
+    - file: /etc/apache2/sites-available/wsgi-keystone.conf
+  - watch_in:
+    - service: keystone_service
+
+{%- endif %}
+
+
 keystone_salt_config:
   file.managed:
     - name: /etc/salt/minion.d/keystone.conf
@@ -43,6 +68,17 @@ keystone_group:
   - require:
     - pkg: keystone_packages
 
+{% if server.websso is defined %}
+
+/etc/keystone/sso_callback_template.html:
+  file.managed:
+  - source: salt://keystone/files/sso_callback_template.html
+  - require:
+    - pkg: keystone_packages
+  - watch_in:
+    - service: keystone_service
+
+{%- endif %}
 
 /etc/keystone/keystone-paste.ini:
   file.managed:
