@@ -1,9 +1,15 @@
 {%- from "keystone/map.jinja" import server with context %}
 {%- if server.enabled %}
 
+/etc/init/keystone.override:
+  file.managed:
+  - contents: "manual"
+
 keystone_packages:
   pkg.installed:
   - names: {{ server.pkgs }}
+  - require:
+    - file: /etc/init/keystone.override
 
 keystone_salt_config:
   file.managed:
@@ -43,6 +49,45 @@ keystone_group:
   - require:
     - pkg: keystone_packages
 
+/etc/apache2/sites-available/wsgi-keystone.conf:
+  file.managed:
+  - source: salt://keystone/files/{{ server.version }}/wsgi-keystone.conf
+  - template: jinja
+  - require:
+    - pkg: keystone_packages
+
+/etc/apache2/sites-enabled/wsgi-keystone.conf:
+  file.symlink:
+  - target: /etc/apache2/sites-available/wsgi-keystone.conf
+  - require:
+    - file: /etc/apache2/sites-available/wsgi-keystone.conf
+
+apache_enable_wsgi:
+  apache_module.enable:
+    - name: wsgi
+    - require:
+      - pkg: keystone_packages
+
+{% if server.websso is defined %}
+/etc/keystone/sso_callback_template.html:
+  file.managed:
+  - source: salt://keystone/files/{{ server.version }}/sso_callback_template.html
+  - require:
+    - pkg: keystone_packages
+
+libapache2_mod_shib2:
+  pkg.installed:
+  - name: libapache2-mod-shib2
+  - require:
+    - file: /etc/init/keystone.override
+
+apache_enable_shib2:
+  apache_module.enable:
+    - name: shib2
+    - require:
+      - pkg: libapache2_mod_shib2
+      - pkg: keystone_packages
+{%- endif %}
 
 /etc/keystone/keystone-paste.ini:
   file.managed:
@@ -139,6 +184,10 @@ keystone_service:
   - enable: True
   - watch:
     - file: /etc/keystone/keystone.conf
+    - file: /etc/apache2/sites-enabled/wsgi-keystone.conf
+    {% if server.websso is defined %}
+    - file: /etc/keystone/sso_callback_template.html
+    {%- endif %}
 {%- endif %}
 
 {%- if grains.get('virtual_subtype', None) == "Docker" %}
