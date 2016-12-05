@@ -42,3 +42,8 @@ parameters:
                   password: ${_param:rabbitmq_openstack_password}
                   virtual_host: '/openstack'
                   ha_queues: true
+                websso:
+                  enabled: false
+                  protocol: "saml2"
+                  remote_id_attribute: "Shib-Identity-Provider"
+                  federation_driver: "keystone.contrib.federation.backends.sql.Federation"
