@@ -36,6 +36,6 @@ keystone:
       location: /etc/keystone/fernet-keys/
     cache:
       engine: memcached
-      members: 
+      members:
       - host: localhost
         port: 11211

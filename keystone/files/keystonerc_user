@@ -11,4 +11,3 @@ export OS_SERVICE_TOKEN={{ provider.token }}
 export OS_SERVICE_ENDPOINT="http://{{ provider.host }}:{{ provider.port }}/{{ provider.get('version', 'v2.0') }}/"
 {%- endif %}
 export OS_AUTH_STRATEGY=keystone
-	
