@@ -21,7 +21,7 @@ From Kilo release Keystone v3 endpoint has definition without version in url
 Sample pillars
 ==============
 
-.. caution:: 
+.. caution::
 
     When you use localhost as your database host (keystone:server:
     atabase:host), sqlalchemy will try to connect to /var/run/mysql/
@@ -270,6 +270,16 @@ Enable CADF audit notification
         notification: true
         notification_format: cadf
 
+Enable Federated keystone
+
+.. code-block:: yaml
+
+    keystone:
+      server:
+        websso:
+          protocol: saml2
+          remote_id_attribute: Shib-Identity-Provider
+          federation_driver: keystone.contrib.federation.backends.sql.Federation
 
 Keystone client
 ---------------

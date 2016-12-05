@@ -5,6 +5,20 @@ keystone_packages:
   pkg.installed:
   - names: {{ server.pkgs }}
 
+{% if server.service_name in ['apache2', 'httpd'] %}
+
+disable_keystone_service:
+  service.dead:
+  - name:
+    - keystone
+    - openstack-keystone
+  - enable: False
+  - require:
+    - pkg: keystone_packages
+
+{%- endif %}
+
+
 keystone_salt_config:
   file.managed:
     - name: /etc/salt/minion.d/keystone.conf
@@ -42,7 +56,20 @@ keystone_group:
   - template: jinja
   - require:
     - pkg: keystone_packages
+  - watch_in:
+    - service: keystone_service
 
+{% if server.websso is defined %}
+
+/etc/keystone/sso_callback_template.html:
+  file.managed:
+  - source: salt://keystone/files/sso_callback_template.html
+  - require:
+    - pkg: keystone_packages
+  - watch_in:
+    - service: keystone_service
+
+{%- endif %}
 
 /etc/keystone/keystone-paste.ini:
   file.managed:
