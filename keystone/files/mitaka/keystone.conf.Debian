@@ -355,6 +355,11 @@ driver = sql
 # Allowed authentication methods. (list value)
 #methods = external,password,token,oauth1
 
+{% if server.websso is defined %}
+methods = external,password,token,{{ server.websso.protocol }}
+{{ server.websso.protocol }} = keystone.auth.plugins.mapped.Mapped
+{%- endif %}
+
 # Entrypoint for the password auth plugin module in the keystone.auth.password
 # namespace. (string value)
 #password = <None>
@@ -372,6 +377,10 @@ driver = sql
 # namespace. (string value)
 #oauth1 = <None>
 
+{% if server.websso is defined %}
+[{{ server.websso.protocol }}]
+remote_id_attribute = {{ server.websso.remote_id_attribute }}
+{%- endif %}
 
 [cache]
 
@@ -834,6 +843,9 @@ admin_bind_host={% if server.bind.address is defined %}{{ server.bind.address }}
 # Entrypoint for the federation backend driver in the keystone.federation
 # namespace. (string value)
 #driver = sql
+{% if server.websso is defined %}
+driver = {{ server.websso.federation_driver }}
+{%- endif %}
 
 # Value to be used when filtering assertion parameters from the environment.
 # (string value)
@@ -856,6 +868,13 @@ admin_bind_host={% if server.bind.address is defined %}{{ server.bind.address }}
 # example: trusted_dashboard=http://acme.com/auth/websso
 # trusted_dashboard=http://beta.com/auth/websso (multi valued)
 #trusted_dashboard =
+{%- if server.websso is defined %}
+{%- if server.websso.trusted_dashboard is defined %}
+{%- for dashboard in server.websso.trusted_dashboard %}
+trusted_dashboard = {{ dashboard }}
+{%- endfor %}
+{%- endif %}
+{%- endif %}
 
 # Location of Single Sign-On callback handler, will return a token to a trusted
 # dashboard host. (string value)

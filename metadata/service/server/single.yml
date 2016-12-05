@@ -40,6 +40,6 @@ parameters:
         ha_queues: true
       cache:
         engine: memcached
-        members: 
+        members:
         - host: localhost
           port: 11211
