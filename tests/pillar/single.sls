@@ -36,6 +36,11 @@ keystone:
       location: /etc/keystone/fernet-keys/
     cache:
       engine: memcached
-      members: 
+      members:
       - host: localhost
         port: 11211
+    websso:
+      enabled: false
+      protocol: "saml2"
+      remote_id_attribute: "Shib-Identity-Provider"
+      federation_driver: "keystone.contrib.federation.backends.sql.Federation"
