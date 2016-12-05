@@ -21,7 +21,7 @@ From Kilo release Keystone v3 endpoint has definition without version in url
 Sample pillars
 ==============
 
-.. caution:: 
+.. caution::
 
     When you use localhost as your database host (keystone:server:
     atabase:host), sqlalchemy will try to connect to /var/run/mysql/
