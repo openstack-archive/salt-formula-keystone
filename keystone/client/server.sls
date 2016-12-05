@@ -32,7 +32,7 @@ keystone_{{ server_name }}_roles:
   keystone.role_present:
   - names: {{ server.roles }}
   {%- if server.admin.token is defined %}
-  - connection_token: {{ connection_args.token }} 
+  - connection_token: {{ connection_args.token }}
   - connection_endpoint: {{ connection_args.endpoint }}
   {%- else %}
   - connection_user: {{ connection_args.user }}
@@ -51,7 +51,7 @@ keystone_{{ server_name }}_service_{{ service_name }}:
   - service_type: {{ service.type }}
   - description: {{ service.description }}
   {%- if server.admin.token is defined %}
-  - connection_token: {{ connection_args.token }} 
+  - connection_token: {{ connection_args.token }}
   - connection_endpoint: {{ connection_args.endpoint }}
   {%- else %}
   - connection_user: {{ connection_args.user }}
@@ -72,7 +72,7 @@ keystone_{{ server_name }}_service_{{ service_name }}_endpoint_{{ endpoint.regio
   - require:
     - keystone: keystone_{{ server_name }}_service_{{ service_name }}
   {%- if server.admin.token is defined %}
-  - connection_token: {{ connection_args.token }} 
+  - connection_token: {{ connection_args.token }}
   - connection_endpoint: {{ connection_args.endpoint }}
   {%- else %}
   - connection_user: {{ connection_args.user }}
@@ -91,10 +91,10 @@ keystone_{{ server_name }}_tenant_{{ tenant_name }}:
   keystone.tenant_present:
   - name: {{ tenant_name }}
   {%- if tenant.description is defined %}
-  - description: {{ tenant.description }} 
+  - description: {{ tenant.description }}
   {%- endif %}
   {%- if server.admin.token is defined %}
-  - connection_token: {{ connection_args.token }} 
+  - connection_token: {{ connection_args.token }}
   - connection_endpoint: {{ connection_args.endpoint }}
   {%- else %}
   - connection_user: {{ connection_args.user }}
@@ -126,7 +126,7 @@ keystone_{{ server_name }}_tenant_{{ tenant_name }}_user_{{ user_name }}:
     - keystone: keystone_{{ server_name }}_tenant_{{ tenant_name }}
     - keystone: keystone_{{ server_name }}_roles
   {%- if server.admin.token is defined %}
-  - connection_token: {{ connection_args.token }} 
+  - connection_token: {{ connection_args.token }}
   - connection_endpoint: {{ connection_args.endpoint }}
   {%- else %}
   - connection_user: {{ connection_args.user }}
