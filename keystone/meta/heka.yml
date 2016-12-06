@@ -105,8 +105,9 @@ remote_collector:
 aggregator:
   alarm_cluster:
     keystone_response_time:
-      policy: highest_severity
+      policy: status_of_members
       alerting: enabled
+      group_by: hostname
       match:
         service: keystone-response-time
       members:
@@ -115,7 +116,7 @@ aggregator:
         service: keystone
         nagios_host: 01-service-clusters
     keystone_logs:
-      policy: highest_severity
+      policy: status_of_members
       alerting: enabled
       group_by: hostname
       match:
