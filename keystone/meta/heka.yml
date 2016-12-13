@@ -29,7 +29,7 @@ metric_collector:
       - metric: openstack_keystone_http_response_times
         field:
           http_method: '== GET || == POST'
-          http_status: '!= 5xx'
+          http_status: '== 2xx'
         relational_operator: '>'
         threshold: 0.3
         window: 60
