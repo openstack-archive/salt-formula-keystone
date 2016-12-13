@@ -241,6 +241,11 @@ notification_driver=messagingv2
 # Deprecated group/name - [rpc_notifier2]/topics
 #notification_topics = notifications
 
+{%- if server.notification.topics is defined %}
+notification_topics = {{ server.notification.topics }}
+{%- endif %}
+
+
 # Seconds to wait for a response from a call. (integer value)
 #rpc_response_timeout = 60
 
