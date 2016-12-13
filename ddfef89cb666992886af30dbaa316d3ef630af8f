@@ -1,0 +1,8 @@
+Code-Review+2: Eric Lemoine <elemoine@mirantis.com>
+Workflow+1: Simon Pasquier <spasquier@mirantis.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Tue, 13 Dec 2016 16:29:07 +0000
+Reviewed-on: https://review.openstack.org/410276
+Project: openstack/salt-formula-keystone
+Branch: refs/heads/master
