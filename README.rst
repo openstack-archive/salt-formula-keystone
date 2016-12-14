@@ -261,6 +261,24 @@ Enable ceilometer notifications
           virtual_host: '/openstack'
           ha_queues: true
 
+Client-side RabbitMQ HA setup
+
+.. code-block:: yaml
+
+    keystone:
+      server:
+        ....
+        message_queue:
+          engine: rabbitmq
+          members:
+            - host: 10.0.16.1
+            - host: 10.0.16.2
+            - host: 10.0.16.3
+          user: openstack
+          password: pwd
+          virtual_host: '/openstack'
+        ....
+
 Enable CADF audit notification
 
 .. code-block:: yaml

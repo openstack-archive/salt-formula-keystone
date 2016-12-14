@@ -1543,17 +1543,15 @@ driver=messagingv2
 # Allowed values: round-robin, shuffle
 #kombu_failover_strategy = round-robin
 
-# The RabbitMQ broker address where a single node is used. (string value)
-# Deprecated group/name - [DEFAULT]/rabbit_host
-#rabbit_host = localhost
+{%- if server.message_queue.members is defined %}
+rabbit_hosts = {% for member in server.message_queue.members -%}
+                   {{ member.host }}:{{ member.get('port', 5672) }}
+                   {%- if not loop.last -%},{%- endif -%}
+               {%- endfor -%}
+{%- else %}
 rabbit_host = {{ server.message_queue.host }}
-
-# The RabbitMQ broker port where a single node is used. (port value)
-# Minimum value: 0
-# Maximum value: 65535
-# Deprecated group/name - [DEFAULT]/rabbit_port
-#rabbit_port = 5672
 rabbit_port = {{ server.message_queue.port }}
+{%- endif %}
 
 # RabbitMQ HA cluster host:port pairs. (list value)
 # Deprecated group/name - [DEFAULT]/rabbit_hosts
