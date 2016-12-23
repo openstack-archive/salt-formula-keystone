@@ -1476,7 +1476,7 @@ servers = ['{{ server.cache.host }}:{{ server.cache.port }}']
 # Deprecated group/name - [DEFAULT]/notification_driver
 #driver =
 {%- if server.notification %}
-driver=messagingv2
+driver = messagingv2
 {%- endif %}
 
 # A URL representing the messaging driver to use for notifications. If not set,
@@ -1488,7 +1488,11 @@ driver=messagingv2
 # Deprecated group/name - [rpc_notifier2]/topics
 # Deprecated group/name - [DEFAULT]/notification_topics
 #topics = notifications
-
+{%- if server.notification_topics is defined %}
+topics = {% for topic in server.notification_topics %}{{ topic }}{% if not loop.last %},{% endif %}{% endfor %}
+{%- else %}
+topics = notifications
+{%- endif %}
 
 [oslo_messaging_rabbit]
 

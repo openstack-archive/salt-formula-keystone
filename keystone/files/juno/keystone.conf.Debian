@@ -304,14 +304,18 @@ admin_bind_host={% if server.bind.address is defined %}{{ server.bind.address }}
 
 # Driver or drivers to handle sending notifications. (multi
 # valued)
-{%- if server.notification %}
 #notification_driver=
-notification_driver=messaging
+{%- if server.notification %}
+notification_driver = messaging
 {%- endif %}
 # AMQP topic used for OpenStack notifications. (list value)
 # Deprecated group/name - [rpc_notifier2]/topics
 #notification_topics=notifications
-#notification_topics=notifications
+{%- if server.notification_topics is defined %}
+notification_topics = {% for topic in server.notification_topics %}{{ topic }}{% if not loop.last %},{% endif %}{% endfor %}
+{%- else %}
+notification_topics = notifications
+{%- endif %}
 
 # Seconds to wait for a response from a call. (integer value)
 #rpc_response_timeout=60
