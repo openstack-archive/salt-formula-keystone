@@ -233,13 +233,19 @@ log_dir = /var/log/keystone
 
 # The Drivers(s) to handle sending notifications. Possible values are
 # messaging, messagingv2, routing, log, test, noop (multi valued)
-{%- if server.notification %}
 #notification_driver=
-notification_driver=messagingv2
+{%- if server.notification %}
+notification_driver = messagingv2
 {%- endif %}
+
 # AMQP topic used for OpenStack notifications. (list value)
 # Deprecated group/name - [rpc_notifier2]/topics
 #notification_topics = notifications
+{%- if server.notification_topics is defined %}
+notification_topics = {% for topic in server.notification_topics %}{{ topic }}{% if not loop.last %},{% endif %}{% endfor %}
+{%- else %}
+notification_topics = notifications
+{%- endif %}
 
 # Seconds to wait for a response from a call. (integer value)
 #rpc_response_timeout = 60

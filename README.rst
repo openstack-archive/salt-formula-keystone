@@ -287,6 +287,10 @@ Enable CADF audit notification
       server:
         notification: true
         notification_format: cadf
+        # optional:
+        notification_topics:
+          - notifications
+          - cadf
 
 Run keystone under Apache
 
