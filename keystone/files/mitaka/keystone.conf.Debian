@@ -1474,9 +1474,10 @@ servers = ['{{ server.cache.host }}:{{ server.cache.port }}']
 # The Drivers(s) to handle sending notifications. Possible values are
 # messaging, messagingv2, routing, log, test, noop (multi valued)
 # Deprecated group/name - [DEFAULT]/notification_driver
-#driver =
-{%- if server.notification %}
-driver=messagingv2
+{%- if server.notification.driver is defined %}
+driver = {{ server.notification.driver }}
+{%- else %}
+#driver=
 {%- endif %}
 
 # A URL representing the messaging driver to use for notifications. If not set,
@@ -1487,15 +1488,18 @@ driver=messagingv2
 # AMQP topic used for OpenStack notifications. (list value)
 # Deprecated group/name - [rpc_notifier2]/topics
 # Deprecated group/name - [DEFAULT]/notification_topics
-#topics = notifications
-
+{%- if server.notification.topics is defined %}
+notification_topics = {{ server.notification.topics }}
+{%- else %}
+#notification_topics = notifications
+{%- endif %}
 
 [oslo_messaging_rabbit]
 
 #
 # From oslo.messaging
 #
-{%- if server.notification %}
+{%- if server.notification is defined %}
 # Use durable queues in AMQP. (boolean value)
 # Deprecated group/name - [DEFAULT]/amqp_durable_queues
 # Deprecated group/name - [DEFAULT]/rabbit_durable_queues

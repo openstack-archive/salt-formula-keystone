@@ -21,7 +21,10 @@ keystone:
       name: 'keystone'
       password: 'password'
       user: 'keystone'
-    notification: true
+    notification:
+      driver: messagingv2
+      topics: notifications,cadf
+    notification_format: cadf
     message_queue:
       engine: rabbitmq
       host: 127.0.0.1
