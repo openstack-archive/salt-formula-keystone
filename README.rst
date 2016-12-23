@@ -251,7 +251,8 @@ Enable ceilometer notifications
 
     keystone:
       server:
-        notification: true
+        notification:
+          driver: messagingv2
         message_queue:
           engine: rabbitmq
           host: 127.0.0.1
@@ -285,7 +286,9 @@ Enable CADF audit notification
 
     keystone:
       server:
-        notification: true
+        notification:
+          driver: messagingv2
+          topics: notifications,cadf # optional
         notification_format: cadf
 
 Run keystone under Apache

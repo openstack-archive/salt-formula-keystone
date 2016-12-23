@@ -233,13 +233,19 @@ log_dir = /var/log/keystone
 
 # The Drivers(s) to handle sending notifications. Possible values are
 # messaging, messagingv2, routing, log, test, noop (multi valued)
-{%- if server.notification %}
+{%- if server.notification.driver is defined %}
+notification_driver = {{ server.notification.driver }}
+{%- else %}
 #notification_driver=
-notification_driver=messagingv2
 {%- endif %}
+
 # AMQP topic used for OpenStack notifications. (list value)
 # Deprecated group/name - [rpc_notifier2]/topics
+{%- if server.notification.topics is defined %}
+notification_topics = {{ server.notification.topics }}
+{%- else %}
 #notification_topics = notifications
+{%- endif %}
 
 # Seconds to wait for a response from a call. (integer value)
 #rpc_response_timeout = 60
@@ -1198,7 +1204,7 @@ servers = ['{{ server.cache.host }}:{{ server.cache.port }}']
 #
 # From oslo.messaging
 #
-{%- if server.notification %}
+{%- if server.notification is defined %}
 # Use durable queues in AMQP. (boolean value)
 # Deprecated group/name - [DEFAULT]/amqp_durable_queues
 # Deprecated group/name - [DEFAULT]/rabbit_durable_queues
