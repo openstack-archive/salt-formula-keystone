@@ -25,7 +25,9 @@ keystone:
       engine: cache
       expiration: 86400
       location: /etc/keystone/fernet-keys/
-    notification: true
+    notification:
+      driver: messagingv2
+      topics: notifications,cadf
     notification_format: cadf
     message_queue:
       engine: rabbitmq

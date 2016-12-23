@@ -9,7 +9,6 @@
           'engine': 'database',
           'expiration': '86400'
         },
-        'notification': False,
         'roles': ['admin', 'Member']
     },
     'RedHat': {
@@ -21,7 +20,6 @@
           'engine': 'database',
           'expiration': '86400'
         },
-        'notification': False,
         'roles': ['admin', 'Member']
     },
 }, merge=pillar.keystone.get('server', {})) %}
