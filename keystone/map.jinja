@@ -10,7 +10,11 @@
           'expiration': '86400'
         },
         'notification': False,
-        'roles': ['admin', 'Member']
+        'roles': ['admin', 'Member'],
+        'wsgi': {
+          'processes': '5',
+          'threads': '1'
+        }
     },
     'RedHat': {
         'pkgs': ['openstack-keystone', 'openstack-utils', 'python-keystone', 'python-keystoneclient', 'python-pycadf'],
@@ -22,7 +26,11 @@
           'expiration': '86400'
         },
         'notification': False,
-        'roles': ['admin', 'Member']
+        'roles': ['admin', 'Member'],
+        'wsgi': {
+          'processes': '5',
+          'threads': '1'
+        }
     },
 }, merge=pillar.keystone.get('server', {})) %}
 
