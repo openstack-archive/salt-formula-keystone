@@ -2,3 +2,17 @@ dashboard:
   keystone:
     format: json
     template: keystone/files/grafana_dashboards/keystone_influxdb.json
+  AutomaticMain:
+    row:
+      ost-control-plane:
+        title: OpenStack Control Plane
+        panel:
+          keystone:
+            title: Keystone
+            target:
+              cluster_status:
+                tags:
+                - key: cluster_name
+                  operator: "="
+                  value: keystone
+
