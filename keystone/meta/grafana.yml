@@ -2,3 +2,19 @@ dashboard:
   keystone:
     format: json
     template: keystone/files/grafana_dashboards/keystone_influxdb.json
+  Main:
+    row:
+      ost-control-plane:
+        title: OpenStack Control Plane
+        panel:
+          keystone:
+            title: Keystone
+            links:
+            - dashboard: Keystone
+              name: Drilldown dashboard
+              title: Keystone
+              type: dashboard
+            target:
+              cluster_status:
+                rawQuery: true
+                query: SELECT last(value) FROM cluster_status WHERE cluster_name = 'keystone' AND environment_label = '$environment' AND $timeFilter GROUP BY time($interval) fill(null)
