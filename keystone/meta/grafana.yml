@@ -2,3 +2,50 @@ dashboard:
   keystone:
     format: json
     template: keystone/files/grafana_dashboards/keystone_influxdb.json
+  for-automatic-main:
+    title: Automatic Main (WIP)
+    editable: true
+    hideControls: false
+    row:
+      from-keystone:
+        title: Control plane
+        showTitle: true
+        height: 100px
+        panel:
+          from-keystone:
+            title: Keystone
+            target:
+              InfluxDB_target:
+                column: value
+                condition: ""
+                dsType: "influxdb"
+                fill: ""
+                function: "last"
+                groupBy:
+                  - params:
+                      - "$interval"
+                    type: time
+                  - params:
+                      - "null"
+                    type: fill
+                groupby_field: ""
+                interval: ""
+                measurement: "cluster_status"
+                policy: "default"
+                query: SELECT last(value) FROM cluster_status WHERE cluster_name = 'keystone' AND $timeFilter GROUP BY time($interval) fill(null)
+                rawQuery: "False"
+                refId: A
+                resultFormat: "time_series"
+                select:
+                  -
+                    - params:
+                        - value
+                      type: "field"
+                    - params:
+                        - value
+                      type: "last"
+                tags:
+                - key: cluster_name
+                  operator: "="
+                  value: keystone
+
