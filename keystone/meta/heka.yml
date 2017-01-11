@@ -1,4 +1,5 @@
-{%- if pillar.keystone.server is defined %}
+{%- from "keystone/map.jinja" import server with context %}
+{%- if server.get('enabled', False) %}
 log_collector:
   decoder:
     keystone:
