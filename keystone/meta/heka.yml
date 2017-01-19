@@ -1,5 +1,8 @@
 {%- from "keystone/map.jinja" import server with context %}
 {%- if server.get('enabled', False) %}
+{%- if (server.service_name == 'apache2') %}
+{%- set apache_site = salt['pillar.get']('apache:server:site:' + site_name) %}
+{%- endif %}
 log_collector:
   decoder:
     keystone:
@@ -7,6 +10,14 @@ log_collector:
       module_file: /usr/share/lma_collector/decoders/openstack_log.lua
       module_dir: /usr/share/lma_collector/common;/usr/share/heka/lua_modules
       adjust_timezone: true
+{%- if apache_site.custom_log_format is defined %}
+    keystone_wsgi:
+      engine: sandbox
+      module_file: /usr/share/lma_collector/decoders/keystone_wsgi_log.lua
+      module_dir: /usr/share/lma_collector/common;/usr/share/heka/lua_modules
+      apache_log_pattern: >-
+        {{ apache_site.custom_log_format|replace('"', '\"') }}
+{%- endif %}
   splitter:
     keystone:
       engine: token
@@ -20,6 +31,16 @@ log_collector:
       priority: ["^Seq"]
       decoder: "keystone_decoder"
       splitter: "keystone_splitter"
+{%- if apache_site.custom_log_format is defined %}
+    keystone_wsgi_log:
+      engine: logstreamer
+      log_directory: "/var/log"
+      file_match: 'apache2/{{ site_name }}.access\.log\.?(?P<Seq>\d*)$'
+      differentiator: ['keystone-wsgi']
+      priority: ["^Seq"]
+      decoder: "keystone_wsgi_decoder"
+      splitter: "TokenSplitter"
+{%- endif %}
 metric_collector:
   trigger:
     keystone_response_time_duration:
