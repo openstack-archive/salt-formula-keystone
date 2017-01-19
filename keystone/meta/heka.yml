@@ -1,5 +1,10 @@
 {%- from "keystone/map.jinja" import server with context %}
 {%- if server.get('enabled', False) %}
+{%- if server.service_name == 'apache2' %}
+{%- set custom_log = salt['pillar.get']('apache:server:site:' + site_name).get('log', {}).get('custom', {}) %}
+{%- set apache_log_format = custom_log.format|default('vhost_combined') %}
+{%- set apache_log_file = custom_log.file|default('/var/log/apache2/' ~ site_name ~ '.access.log') %}
+{%- endif %}
 log_collector:
   decoder:
     keystone:
@@ -7,6 +12,14 @@ log_collector:
       module_file: /usr/share/lma_collector/decoders/openstack_log.lua
       module_dir: /usr/share/lma_collector/common;/usr/share/heka/lua_modules
       adjust_timezone: true
+{%- if server.service_name == 'apache2' %}
+    keystone_wsgi:
+      engine: sandbox
+      module_file: /usr/share/lma_collector/decoders/keystone_wsgi_log.lua
+      module_dir: /usr/share/lma_collector/common;/usr/share/heka/lua_modules
+      apache_log_pattern: >-
+        {{ apache_log_format }}
+{%- endif %}
   splitter:
     keystone:
       engine: token
@@ -20,6 +33,16 @@ log_collector:
       priority: ["^Seq"]
       decoder: "keystone_decoder"
       splitter: "keystone_splitter"
+{%- if server.service_name == 'apache2' %}
+    keystone_wsgi_log:
+      engine: logstreamer
+      log_directory: "{{ salt['file.dirname'](apache_log_file) }}
+      file_match: '{{ salt['file.basename'](apache_log_file)|replace('.', '\.') }}\.?(?P<Seq>\d*)$'
+      differentiator: ['keystone-wsgi']
+      priority: ["^Seq"]
+      decoder: "keystone_wsgi_decoder"
+      splitter: "TokenSplitter"
+{%- endif %}
 metric_collector:
   trigger:
     keystone_response_time_duration:
