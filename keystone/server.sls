@@ -198,6 +198,7 @@ keystone_entrypoint:
 keystone_syncdb:
   cmd.run:
   - name: keystone-manage db_sync; sleep 1
+  - timeout: 60
   - require:
     - service: keystone_service
 {%- endif %}
